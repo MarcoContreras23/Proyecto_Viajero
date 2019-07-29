@@ -38,6 +38,11 @@ class Graph:
             if edge.origin is origin and edge.destiny is destiny:
                 return edge
 
+    def Get_Places(self, origin, destiny):
+        for edge in self.conection:
+            if edge.origin is origin and edge.destiny is destiny:
+                return edge
+
     def search_node(self, label):
         for node in self.place:
             if node.label is label:

@@ -22,13 +22,16 @@ class GUI:
         self.y = 0
         self.time = None
         self.cost = None
+        self.destiny = None
+        self.origin = None
         self.cursor = Cursor()
         self.mintime = False
         self.mincost = False
         self.ways = False
         self.pas = False
         self.obs = False
-        self.MinMoney = True
+        self.MinMoney = False
+        self.start = False
         self.visited = []
 
         self.actividadesVertice= []# esta lista se va a limpiar en cuanto se llame a el algoritmo que
@@ -80,25 +83,25 @@ class GUI:
         # Asignacion de botones
         boton = ButtonP(button, button2, 300, 60)
         boton2 = ButtonP(button, button2, 440, 60)
+        boton3 = ButtonP(button,button2,160,60)
         # texto de botones
         obstruccion = fuente.render("Obstruir camino", True, (0, 0, 0))
         way = fuente.render("Minimum way", True,(0,0,0))
-
+        travel = fuente.render("Start Travel",True,(0,0,0))
         init = None
         poss = (0, 0)
         MinCost = []
         MinTime = []
+        airplane = False
+        car = False
+        donkey = False
+
 
         while True:
             """for donde se ejecutan los eventos"""
             display.fill((189, 195, 199))
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    """for place in self.graph.place:
-                        if self.cursor.colliderect(place.rect):
-                            poss = (place.x, place.y)
-                            init = place
-                            self.pas = True"""
                 #ventanas ofertar trabajos de cada nodo
                     if self.startRoute:
                         for places in self.graph.place:
@@ -119,7 +122,10 @@ class GUI:
                                         Button(screenTK, text="ok",
                                                command=lambda:screenTK.destroy()).place(x=x, y=90)
                                 screenTK.mainloop()
+
+
                     if self.cursor.colliderect(boton2.rect):
+                        self.start = True
                         screenTK = Tk()
                         size = self.screen_sizeW()
                         screenTK.geometry(
@@ -194,6 +200,36 @@ class GUI:
                             self.mintime = False
                         self.ways = False
 
+                    if self.start:
+                        screenTK4 = Tk()
+                        size = self.screen_sizeW()
+                        screenTK4.geometry(
+                            f"430x260+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                        screenTK4.title(
+                            "Travel form")
+                        edge = self.graph.Get_Places(self.origin, self.destiny)
+                        #print(edge.transport)
+                        for transport in edge.transport:
+                            if transport.id == 1:
+                                airplane = True
+                                Tr1 = transport
+                            if transport.id == 2:
+                                car = True
+                                Tr2 = transport
+                            if transport.id == 3:
+                                donkey = True
+                                Tr3 = transport
+                        if airplane:
+                            Button(screenTK4, text="Airplane",
+                                   command=lambda: self.transport(screenTK4, Tr1)).place(x=20, y=50)
+                        if car:
+                            Button(screenTK4, text="Car",
+                                   command=lambda: self.transport(screenTK4, Tr2)).place(x=20, y=100)
+                        if donkey:
+                            Button(screenTK4, text="Donkey",
+                                   command=lambda: self.transport(screenTK4, Tr3)).place(x=20, y=150)
+                        screenTK4.mainloop()
+
                     if self.cursor.colliderect(boton.rect):
                         self.obs = True
                     elif self.obs:
@@ -204,6 +240,8 @@ class GUI:
                                 self.graph.conection[a].obs = True
                                 break
                             self.obs = False
+
+
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
@@ -215,19 +253,25 @@ class GUI:
                 """grafica las aristas"""
                 show = []
                 for j in range(0, len(self.graph.conection)):
-                    pos = self.pos_peso(j)
                     origin = self.graph.conection[j].origin
                     destiny = self.graph.conection[j].destiny
+
+
+
                     if self.graph.conection[j] not in show:
                         self.graph.conection[j].line = (pygame.draw.line(display, self.graph.conection[j].color,
                                                                      (origin.x,
                                                                       origin.y),
                                                                      (destiny.x,
                                                                       destiny.y),3))
+                        self.graph.Get_Edge(destiny, origin).line = self.graph.conection[j].line
                         show.append(self.graph.conection[j])
                         show.append(self.graph.Get_Edge(destiny, origin))
+                    #pygame.draw.rect(display, (0, 0, 0),
+                     #                (self.graph.conection[j].rect.left, self.graph.conection[j].rect.top
+                      #                , self.graph.conection[j].rect.width, self.graph.conection[j].rect.height))
                     if self.graph.conection[j].obs:
-                        display.blit(dead, (pos[0], pos[1]))
+                        display.blit(dead, (self.graph.conection[j].line.centerx ,self.graph.conection[j].line.centery))
 
 
                 for i in range(0, len(self.graph.place)):
@@ -236,6 +280,7 @@ class GUI:
                     scoretext = font.render(str(self.graph.place[i].name_city), 1, (0, 0, 0))
                     display.blit(scoretext, (self.graph.place[i].x - 64, self.graph.place[i].y - 64))
                     self.graph.place[i].line = display.blit(city, (self.graph.place[i].x - 30,self.graph.place[i].y - 40))
+
             if self.pas:
                 Orientation = self.MoveImage(poss, init, airplaneRight, airplaneDown, airplaneLeft, airplaneUp)
                 Orientation2 = self.MoveCar(poss,init, carRight, carDown, carLeft, carUp)
@@ -249,37 +294,9 @@ class GUI:
             self.cursor.update()
             boton.update(display, self.cursor, obstruccion)
             boton2.update(display, self.cursor, way)
+            boton3.update(display,self.cursor,travel)
             pygame.display.update()
 
-
-    def pos_peso(self, j):
-
-                if self.graph.conection[j].origin.x < self.graph.conection[j].destiny.x:
-                    posx = self.graph.conection[j].origin.x + \
-                           ((self.graph.conection[j].destiny.x - self.graph.conection[j].destiny.x) / 2)
-                    tipo = 1
-                else:
-                    posx = self.graph.conection[j].destiny.x + \
-                           ((self.graph.conection[j].origin.x - self.graph.conection[j].destiny.x) / 2)
-                    tipo = 2
-                if self.graph.conection[j].origin.y < self.graph.conection[j].destiny.y:
-                    posy = self.graph.conection[j].origin.y + \
-                           ((self.graph.conection[j].destiny.y - self.graph.conection[j].origin.y) / 2)
-                    tipo2 = 1
-                else:
-                    posy = self.graph.conection[j].destiny.y + \
-                           ((self.graph.conection[j].origin.y - self.graph.conection[j].destiny.y) / 2)
-                    tipo2 = 2
-
-                if (tipo is 1 and tipo2 is 1) or (tipo is 2 and tipo2 is 2):
-                        posx += -13
-                        posy += -20
-                elif (tipo is 1 and tipo2 is 2) or (tipo is 2 and tipo2 is 1):
-                        posx += -13
-                        posy += -30
-                pos = [posx, posy]
-
-                return pos
 
     def transportMove(self, init, poss):
         if init not in self.visited:
@@ -380,6 +397,10 @@ class GUI:
         else:
             self.mintime = True
         screenTK.destroy()
+
+    def transport(self, screen, transport):
+        self.form = transport
+        screen.destroy()
 
     def recopilarActividades(self,screenTK ,t):
         self.actividadesVertice.append(t)
