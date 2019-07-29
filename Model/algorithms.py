@@ -4,6 +4,8 @@ from math import inf
 
 
 class Algorithms:
+    def __init__(self):
+        self.routeEconomica =[]
 
     def BFS(self, visited, trail):
         if len(trail) == 0:
@@ -57,3 +59,36 @@ class Algorithms:
         visitPlaces = self.Dijkstra(
             minplace, places, conection, edgesOrigin, state, visitPlaces,minCost,minTime)
         return visitPlaces
+
+    def llenarRoute(self,origen,backpacker):
+        mayor = 0
+        for i in self.place:
+            if i.status[1] <= backpacker.budget and mayor.status[1] < i.status[1]:
+                mayor = i
+        aux = mayor.status[0]
+        while aux is not origen:
+            self.routeEconomica.append(aux)
+            aux = self.buscar_Vertice(aux.status[0])
+
+        self.ordenar_ruta()
+
+    def ordenar_ruta(self):
+        tem=[]
+        for i in range(len(self.routeEconomica), -1, -1):
+            tem.append(self.routeEconomica[i])
+        self.routeEconomica = tem
+
+#punto 3
+    def restar_costos(self, origen, destino,transporte,actividades,backpacker):
+        restarCosto = 0
+        restarTiempo = 0
+        for v in origen.adjacencies:
+            if v.destiny is destino:
+                restarCosto += v.Distance*transporte.value
+                restarTiempo += v.distance*transporte.time
+        for t in actividades:
+            restarCosto += t.cost
+            restarTiempo += t.time
+
+        backpacker.budget -= restarCosto
+        backpacker.time -= restarTiempo
