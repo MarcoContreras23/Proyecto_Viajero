@@ -1,5 +1,6 @@
 from Model.Backpacker import *
 from Model.algorithms import *
+from Model.Conection import *
 
 class Graph:
 
@@ -13,6 +14,24 @@ class Graph:
         self.task = []
         self.conection = []
         self.visited = []
+
+
+    def add_conection(self,distance ,origin,destiny,transport,x,y):
+        newConection = Conection(distance,origin,destiny,transport,x,y)
+        newConectionB = Conection(distance,origin,destiny,transport,x,y)
+        pas = True
+        pas1 = False
+        for conection in self.conection:
+            if newConection == conection:
+                pas = False
+            if newConectionB == conection:
+                pas1 = False
+                conection.bi = True
+        if pas1:
+            origin.adjacences.append(destiny)
+        if pas and not pas1:
+            self.conection.append(newConection)
+            origin.adjacences.append(destiny)
 
 
     def search_node(self, label):

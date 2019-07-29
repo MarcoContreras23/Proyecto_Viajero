@@ -4,6 +4,7 @@ import threading
 from pygame.locals import *
 from Principal.Button import *
 from Principal.Cursor import *
+import ctypes
 from pygame import Rect
 
 pygame.init()
@@ -20,8 +21,16 @@ class GUI:
         self.obs = False
         self.visited = []
         self.MinMoney = True
+        self.pas = False
         thread = threading.Thread(self.all())
         thread.start()
+
+    def screen_sizeW(self):
+        user32 = ctypes.windll.user32
+        user32.SetProcessDPIAware()
+        ancho, alto = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        size = (ancho, alto)
+        return size
 
     def all(self):
 
@@ -62,23 +71,43 @@ class GUI:
         way = fuente.render("Minimum way", True,(0,0,0))
 
 
-
-        posx = -1000
-        posy = -1000
-        poss = pygame.mouse.get_pos()
-        speed = 2
-        right = True
-        pas = False
+        init = None
+        poss = (0, 0)
 
         while True:
             """for donde se ejecutan los eventos"""
+            display.fill((189, 195, 199))
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
                     for place in self.graph.place:
                         if self.cursor.colliderect(place.rect):
                             poss = (place.x, place.y)
-                            pas = True
+                            init = place
+                            self.pas = True
+                    if self.cursor.colliderect(boton2.rect):
+                        screenTK = Tk()
+                        size = self.screen_sizeW()
+                        screenTK.geometry(
+                            f"430x110+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                        screenTK.title("Minimum way")
+                        self.cost = IntVar()
+                        self.time = IntVar()
+                        textCost = StringVar(
+                            value="Choose the cost between city and city")
+                        textTime = StringVar(
+                            value="Choose the time between city and city"
+                        )
+                        labelCost = Label(
+                            screenTK, textvariable=textCost).place(x=5, y=5)
+                        labelTime = Label(
+                            screenTK, textvariable = textTime).place(x = 10 , y = 50)
+
+                        Time_field = Entry(
+                            screenTK, textvariable = self.time, width = 25).place(x = 10, y = 70)
+                        Cost_field = Entry(
+                            screenTK, textvariable=self.cost, width=25).place(x=10, y=30)
+                        screenTK.mainloop()
+
                     if self.cursor.colliderect(boton.rect):
                         self.obs = True
                     elif self.obs:
@@ -92,40 +121,26 @@ class GUI:
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-            """if pas:
-                display.blit(van, pos)
+            if self.pas:
+                display.blit(van, poss)
                 for place in self.graph.place:
-                    if place.x == pos[0] and place.y == pos[1]:
+                    if place.x == poss[0] and place.y == poss[1]:
                         init = place
-                pos = self.transportMove(init, pos)
+                poss = self.transportMove(init, poss)
 
 
-            for  node in self.graph.place:
-
-                if posx < node.x:
-                    posx += speed
-                if posx > node.x:
-                    posx += speed
-                if posx == node.x:
-                    if posy > node.y:
-                        posy += speed
-                    if posy < node.y:
-                        posy += speed"""
-
-            if right and pas:
-                if poss[0] < 1330:
-                    print("Entrooo")
-                    poss = (poss[0] + speed , poss[1])
-                else:
-                    right = False
-            elif pas:
-                if poss[0] > 1:
+            """for  node in self.graph.place:
+                if poss[0] < node.x:
+                    poss = (poss[0] + speed , poss[1])#x
+                if poss[0] > node.x:
                     poss = (poss[0] - speed , poss[1])
-                else:
-                    right = True
+                if poss[0] == node.x:
+                    if poss[1] > node.y:
+                        poss = (poss[0] , poss[1] - speed)
+                    if poss[1] < node.y:
+                        poss = (poss[0] , poss[1] + speed)
+                """
 
-
-            display.fill((189, 195, 199))
             if self.graph == None:
                 print("Grafo vacío, no se puede dibujar")
             else:
@@ -151,14 +166,9 @@ class GUI:
                     display.blit(scoretext, (self.graph.place[i].x - 64, self.graph.place[i].y - 64))
                     self.graph.place[i].line = display.blit(city, (self.graph.place[i].x - 30,self.graph.place[i].y - 40))
 
-
-                display.blit(van,poss) # Image move
-                self.cursor.update()
-                boton.update(display, self.cursor, obstruccion)
-                boton2.update(display, self.cursor, way)
-
-
-
+            self.cursor.update()
+            boton.update(display, self.cursor, obstruccion)
+            boton2.update(display, self.cursor, way)
             pygame.display.update()
 
 
@@ -191,25 +201,25 @@ class GUI:
 
                 return pos
 
-    def transportMove(self, init, pos):
+    def transportMove(self, init, poss):
         if init not in self.visited:
             self.visited.append(init)
         speed = 2
         i = 0
-        pas = False
+        #pas = False
         if len(self.visited) is len(self.graph.place):
             self.visited.clear()
         for j in range(len(init.adjacencies)):
-            if init.adjacencies[j] not in self.visited:
+            if init.adjacencies[j].destiny not in self.visited:
                 i = j
                 break
-        if pos[0] < init.adjacencies[i].x:
-            pos = (pos[0] + speed, pos[1])
-        if pos[0] > init.adjacencies[i].x:
-            pos = (pos[0] - speed, pos[1])
-        if pos[0] == init.adjacencies[i].x:
-            if pos[1] > init.adjacencies[i].y:
-                pos = (pos[0], pos[1] - speed)
-            if pos[1] < init.adjacencies[i].y:
-                pos = (pos[0], pos[1] + speed)
-        return pos
+            if poss[0] < init.adjacencies[i].destiny.x:
+                poss = (poss[0] + speed, poss[1])  # x
+            if poss[0] > init.adjacencies[i].destiny.x:
+                poss = (poss[0] - speed, poss[1])
+            if poss[0] == init.adjacencies[i].destiny.x:
+                if poss[1] > init.adjacencies[i].destiny.y:
+                    poss = (poss[0], poss[1] - speed)
+                if poss[1] < init.adjacencies[i].destiny.y:
+                    poss = (poss[0], poss[1] + speed)
+        return poss
