@@ -30,6 +30,11 @@ class GUI:
         self.obs = False
         self.MinMoney = True
         self.visited = []
+
+        self.actividadesVertice= []# esta lista se va a limpiar en cuanto se llame a el algoritmo que
+        #resta el costo de las actividades al mochilero para seguir al siguiente nodo
+
+        self.startRoute = True #para establecer cuando el mochilero comenzo su ruta y se le deben ofertar actividades y trabajos
         self.all()
         # thread = threading.Thread(self.all())
         # thread.start()
@@ -94,6 +99,27 @@ class GUI:
                             poss = (place.x, place.y)
                             init = place
                             self.pas = True"""
+                #ventanas ofertar trabajos de cada nodo
+                    if self.startRoute:
+                        for places in self.graph.place:
+                            if self.cursor.colliderect(places.rect):
+                                screenTK = Tk()
+                                size = self.screen_sizeW()
+                                screenTK.geometry(
+                                    f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                screenTK.title(
+                                    "Select actividad")
+                                x = 40
+                                y = 0
+                                for t in places.task:
+                                    if t.type == "optional":s
+                                        y+=30
+                                        Button(screenTK, text=t.name,
+                                            command=lambda: self.recopilarActividades(screenTK, t)).place(x=x,y= y)
+                                screenTK.mainloop()
+
+
+
                     if self.cursor.colliderect(boton2.rect):
                         screenTK = Tk()
                         size = self.screen_sizeW()
@@ -352,6 +378,10 @@ class GUI:
         else:
             self.mintime = True
         screenTK.destroy()
+
+    def recopilarActividades(self,screenTK ,t):
+        self.actividadesVertice.append(t)
+        print (t.name)
 
     def min(self):
         men = self.visited[0]
