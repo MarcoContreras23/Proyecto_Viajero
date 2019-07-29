@@ -185,4 +185,3 @@ class Algorithms:
         self.tiempoLugares += restarTiempo
         self.gastoLugares += restarCosto
         self.gananciasLugares += self.gananciasTrabajos
-    def reporte(self,lugaresVisitados,transporteUtilizado, trabajos, ganancias, actividades, gastos ):
