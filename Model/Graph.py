@@ -5,7 +5,7 @@ from Model.Conection import *
 class Graph:
 
     def __init__(self):
-        self.backpacker = Backpacker()
+        self.backpacker = Backpacker(10000,20000)
         self.country = ""
         self.name = ""
         self.place = []
