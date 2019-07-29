@@ -33,6 +33,10 @@ class Graph:
             self.conection.append(newConection)
             origin.adjacences.append(destiny)
 
+    def Get_Edge(self, origin, destiny):
+        for edge in self.conection:
+            if edge.origin is origin and edge.destiny is destiny:
+                return edge
 
     def search_node(self, label):
         for node in self.place:
@@ -54,9 +58,7 @@ class Graph:
         self.visited = Algorithms().Dijkstra(
             vertex, self.place, [], self.conection, True, self.visited, cost, time)
         way = []
-        wayF = []
         cont = True
-        aux = None
         men = self.visited[0]
         if cost:
             for node in self.visited:

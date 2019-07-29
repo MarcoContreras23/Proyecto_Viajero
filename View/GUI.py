@@ -30,6 +30,11 @@ class GUI:
         self.obs = False
         self.MinMoney = True
         self.visited = []
+
+        self.actividadesVertice= []# esta lista se va a limpiar en cuanto se llame a el algoritmo que
+        #resta el costo de las actividades al mochilero para seguir al siguiente nodo
+
+        self.startRoute = True #para establecer cuando el mochilero comenzo su ruta y se le deben ofertar actividades y trabajos
         self.all()
         # thread = threading.Thread(self.all())
         # thread.start()
@@ -94,6 +99,24 @@ class GUI:
                             poss = (place.x, place.y)
                             init = place
                             self.pas = True"""
+                #ventanas ofertar trabajos de cada nodo
+                    if self.startRoute:
+                        for places in self.graph.place:
+                            if self.cursor.colliderect(places.rect):
+                                screenTK = Tk()
+                                size = self.screen_sizeW()
+                                screenTK.geometry(
+                                    f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                screenTK.title(
+                                    "Select actividad")
+                                x = 40
+                                y = 0
+                                for t in places.task:
+                                    if t.type == "optional":
+                                        y+=30
+                                        Button(screenTK, text=t.name,
+                                            command=lambda: self.recopilarActividades(screenTK, t)).place(x=x,y= y)
+                                screenTK.mainloop()
                     if self.cursor.colliderect(boton2.rect):
                         screenTK = Tk()
                         size = self.screen_sizeW()
@@ -118,11 +141,11 @@ class GUI:
                         textT = StringVar(
                             value="Write the trip time.")
                         labelT = Label(
-                            screenTK2, textvariable=textT).place(x=200, y=10)
+                            screenTK2, textvariable=textT).place(x=5, y=10)
                         Time_field = Entry(
-                            screenTK2, textvariable=self.time, width=25).place(x=210, y=30)
+                            screenTK2, textvariable=self.time, width=25).place(x=5, y=30)
                         Button(screenTK2, text="ok",
-                               command=lambda :self.way(screenTK2,2).place(x = 30 , y= 60))
+                               command=lambda: self.way(screenTK2, 2)).place(x=30, y=60)
                         screenTK2.mainloop()
                     elif self.mincost:
                         self.ways = True
@@ -163,9 +186,9 @@ class GUI:
                             for edge in self.graph.conection:
                                 for node in MinTime:
                                     if edge.origin is self.graph.Get_Vertex(node.statusT[1]) and edge.destiny is node:
-                                        edge.color = (0, 0, 255)
+                                        edge.color = (0, 0, 0)
                                     if edge.origin is node and edge.destiny is self.graph.Get_Vertex(node.status[1]):
-                                        edge.color = (0, 0, 255)
+                                        edge.color = (0, 0, 0)
                             self.mintime = False
                         self.ways = False
 
@@ -188,16 +211,19 @@ class GUI:
                 print("Grafo vacío, no se puede dibujar")
             else:
                 """grafica las aristas"""
-
+                show = []
                 for j in range(0, len(self.graph.conection)):
                     pos = self.pos_peso(j)
                     origin = self.graph.conection[j].origin
                     destiny = self.graph.conection[j].destiny
-                    self.graph.conection[j].line = (pygame.draw.line(display, (36, 113, 163),
+                    if self.graph.conection[j] not in show:
+                        self.graph.conection[j].line = (pygame.draw.line(display, self.graph.conection[j].color,
                                                                      (origin.x,
                                                                       origin.y),
                                                                      (destiny.x,
                                                                       destiny.y),3))
+                        show.append(self.graph.conection[j])
+                        show.append(self.graph.Get_Edge(destiny, origin))
                     if self.graph.conection[j].obs:
                         display.blit(dead, (pos[0], pos[1]))
 
@@ -352,6 +378,10 @@ class GUI:
         else:
             self.mintime = True
         screenTK.destroy()
+
+    def recopilarActividades(self,screenTK ,t):
+        self.actividadesVertice.append(t)
+        print (t.name)
 
     def min(self):
         men = self.visited[0]

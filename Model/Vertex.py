@@ -13,5 +13,5 @@ class Vertex:
         self.adjacencies = []
         self.status = [inf, None]
         self.statusT = [inf, None]
-
+        self.statusD = [inf, None]
         self.rect = Rect(x,y,65,65)

@@ -60,21 +60,39 @@ class Algorithms:
                 temp.append(edge)
                 conection.append(edge)
         for edge in temp:
-            if (edge.origin.status[0] + edge.distance) < edge.destiny.status[0]:
-                if minCost:
+            if minCost:
+                if (edge.origin.status[0] + edge.distance) < edge.destiny.status[0]:
                     for thing in edge.destiny.task:
                         if thing.type == 'mandatory':
                             cost += thing.cost
-                if minTime:
+                    edge.destiny.status[0] = edge.origin.status[0] + \
+                                             edge.distance + cost
+                    edge.destiny.status[1] = edge.origin.label
+            elif minTime:
+                if (edge.origin.statusT[0] + edge.distance) < edge.destiny.statusT[0]:
                     for thing in edge.destiny.task:
                         if thing.type == 'mandatory':
-                            cost += thing.time + edge.destiny.TimeHere
-                edge.destiny.status[0] = edge.origin.status[0] + edge.distance + cost
-                edge.destiny.status[1] = edge.origin.label
+                            cost += thing.time + edge.destiny.timeHere
+                    edge.destiny.statusT[0] = edge.origin.statusT[0] + \
+                                              edge.distance + cost
+                    edge.destiny.statusT[1] = edge.origin.label
+            else:
+                if (edge.origin.statusD[0] + edge.distance) < edge.destiny.statusD[0]:
+                    edge.destiny.statusD[0] = edge.origin.statusD[0] + edge.distance
+                    edge.destiny.statusD[1] = edge.origin.label
         for edge in conection:
-            if edge.destiny.status[0] < minvalue and edge.destiny not in visitPlaces:
-                minvalue = edge.destiny.status[0]
-                minplace = edge.destiny
+            if minCost:
+                if edge.destiny.status[0] < minvalue and edge.destiny not in visitPlaces:
+                    minvalue = edge.destiny.status[0]
+                    minplace = edge.destiny
+            elif minTime:
+                if edge.destiny.statusT[0] < minvalue and edge.destiny not in visitPlaces:
+                    minvalue = edge.destiny.statusT[0]
+                    minplace = edge.destiny
+            else:
+                if edge.destiny.statusD[0] < minvalue and edge.destiny not in visitPlaces:
+                    minvalue = edge.destiny.statusD[0]
+                    minplace = edge.destiny
         visited.append(minplace)
         visitPlaces = self.Dijkstra(
             minplace, places, conection, edgesOrigin, state, visitPlaces,minCost,minTime)
