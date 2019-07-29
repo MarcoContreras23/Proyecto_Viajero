@@ -207,18 +207,18 @@ class GUI:
                             f"430x260+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
                         screenTK4.title(
                             "Travel form")
-                        edge = self.graph.Get_Places(self.origin, self.destiny)
+                        edge = self.graph.Get_Edge( self.origin, self.destiny)
                         #print(edge.transport)
-                        for transport in edge.transport:
-                            if transport.id == 1:
+                        for transports in self.graph.transport:
+                            if transports.id == 1:
                                 airplane = True
-                                Tr1 = transport
-                            if transport.id == 2:
+                                Tr1 = transports
+                            if transports.id == 2:
                                 car = True
-                                Tr2 = transport
-                            if transport.id == 3:
+                                Tr2 = transports
+                            if transports.id == 3:
                                 donkey = True
-                                Tr3 = transport
+                                Tr3 = transports
                         if airplane:
                             Button(screenTK4, text="Airplane",
                                    command=lambda: self.transport(screenTK4, Tr1)).place(x=20, y=50)

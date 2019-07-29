@@ -21,6 +21,7 @@ class Main:
             time = transpor['timeByKm']
             transpor = Transport(id,name,value,time)
             graph.transport.append(transpor)
+            print(graph.transport)
 
         for places in data['places']:
             label = places['label']
