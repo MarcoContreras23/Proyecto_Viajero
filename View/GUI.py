@@ -116,6 +116,8 @@ class GUI:
                                         y+=30
                                         Button(screenTK, text=t.name,
                                             command=lambda: self.recopilarActividades(screenTK, t)).place(x=x,y= y)
+                                        Button(screenTK, text="ok",
+                                               command=lambda:screenTK.destroy()).place(x=x, y=90)
                                 screenTK.mainloop()
                     if self.cursor.colliderect(boton2.rect):
                         screenTK = Tk()
