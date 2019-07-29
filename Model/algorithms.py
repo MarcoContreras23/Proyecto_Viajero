@@ -50,7 +50,7 @@ class Algorithms:
                         if thing.type == 'mandatory':
                             cost += thing.time + edge.destiny.TimeHere
                 edge.destiny.status[0] = edge.origin.status[0] + edge.distance + cost
-                edge.origin.status[1] = edge.origin.label
+                edge.destiny.status[1] = edge.origin.label
         for edge in conection:
             if edge.destiny.status[0] < minvalue and edge.destiny not in visitPlaces:
                 minvalue = edge.destiny.status[0]

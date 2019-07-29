@@ -12,5 +12,6 @@ class Vertex:
         self.task = []  # tareas o cosas por hacer
         self.adjacencies = []
         self.status = [inf, None]
+        self.statusT = [inf, None]
 
         self.rect = Rect(x,y,65,65)

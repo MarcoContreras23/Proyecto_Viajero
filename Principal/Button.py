@@ -2,10 +2,10 @@ import pygame
 import random
 import string
 
-class Button(pygame.sprite.Sprite):
+class ButtonP(pygame.sprite.Sprite):
 
     def __init__(self, imagen, imagen1 , x, y):
-        super(Button, Button).__init__(self)
+        super(ButtonP, ButtonP).__init__(self)
         self.normal = imagen
         self.seleccion = imagen1
         self.actual = self.normal

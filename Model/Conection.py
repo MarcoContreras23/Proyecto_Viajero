@@ -10,4 +10,5 @@ class Conection:
         self.bi = False
         self.obs = False
         self.rect = Rect(x, y, 60, 40)
+        self.color = (0, 0, 0)
 #        self.rect = Rect(origin.rect.x,destiny.rect.y,20,20)

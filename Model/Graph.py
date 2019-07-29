@@ -44,18 +44,38 @@ class Graph:
             if place.label is id:
                 return place
 
-    def Dijkstra(self):
+    def Dijkstra(self, vertex, cost, time, variable):
         self.visited.clear()
-        vertex = self.Get_Vertex('A')
+        vertex = vertex
         vertex.status[0] = 0
         vertex.status[1] = vertex.label
+        vertex.statusT[0] = 0
+        vertex.statusT[1] = vertex.label
         self.visited = Algorithms().Dijkstra(
-        vertex, self.place, [], self.conection, True, self.visited)
-        show = []
-        for edge in self.conection:
-            if edge.origin not in show:
-                print(f"{edge.origin.label} = {edge.origin.status}")
-                show.append(edge.origin)
-            if edge.destiny not in show:
-                print(f"{edge.destiny.label} = {edge.destiny.status}")
-                show.append(edge.destiny)
+            vertex, self.place, [], self.conection, True, self.visited, cost, time)
+        way = []
+        wayF = []
+        cont = True
+        aux = None
+        men = self.visited[0]
+        if cost:
+            for node in self.visited:
+                if node.status[0] > men.status[0] and node.status[0] < variable:
+                    men = node
+            while cont:
+                way.append(men)
+                if self.Get_Vertex(men.status[1]) is not men:
+                    men = self.Get_Vertex(men.status[1])
+                else:
+                    cont = False
+        if time:
+            for node in self.visited:
+                if node.statusT[0] > men.statusT[0] and node.statusT[0] < variable:
+                    men = node
+            while cont:
+                way.append(men)
+                if self.Get_Vertex(men.statusT[1]) is not men:
+                    men = self.Get_Vertex(men.statusT[1])
+                else:
+                    cont = False
+        return way
