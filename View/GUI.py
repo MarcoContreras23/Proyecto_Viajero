@@ -295,8 +295,13 @@ class GUI:
                     #pygame.draw.rect(display, (0, 0, 0),
                      #                (self.graph.conection[j].rect.left, self.graph.conection[j].rect.top
                       #                , self.graph.conection[j].rect.width, self.graph.conection[j].rect.height))
-                    pygame.draw.rect(display,(0,0,0),self.graph.conection[j].rect,2)
+                    # pygame.draw.rect(display,(0,0,0),self.graph.conection[j].rect,2)
                     if self.graph.conection[j].obs:
+                        self.graph.conection[j].line = (pygame.draw.line(display, (250,0,0),
+                                                                         (origin.x,
+                                                                          origin.y),
+                                                                         (destiny.x,
+                                                                          destiny.y), 3))
                         display.blit(dead, (self.graph.conection[j].line.centerx ,self.graph.conection[j].line.centery))
 
 
