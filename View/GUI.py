@@ -36,6 +36,7 @@ class GUI:
         self.begin = True
         self.visited = []
         self.waySave = []
+        self.inicio = False
 
         self.actividadesVertice = []  # esta lista se va a limpiar en cuanto se llame a el algoritmo que
         # resta el costo de las actividades al mochilero para seguir al siguiente nodo
@@ -109,18 +110,68 @@ class GUI:
             display.fill((189, 195, 199))
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                # ventanas ofertar trabajos de cada nodo
+            #cuando comience a viajar
                     if self.startRoute:
+                        if self.time is None:
+                            screenTK3 = Tk()
+                            size = self.screen_sizeW()
+                            screenTK3.geometry(
+                                f"430x110+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                            screenTK3.title(
+                                "Backpacker")
+                            self.cost =IntVar()
+                            self.time =IntVar()
+                            textC = StringVar(
+                                value="Write the backpacker budget.")
+                            labelC = Label(
+                                screenTK3, textvariable=textC).place(x=5, y=10)
+                            texcT =StringVar(
+                                value="Write the backpacker time")
+                            labelT= Label(
+                                screenTK3,textvariable=texcT).place(x=5,y=50)
+                            Cost_field = Entry(
+                                screenTK3, textvariable=self.cost, width=25).place(x=10, y=30)
+                            time_field = Entry(
+                                screenTK3, textvariable = self.time, width=25).place(x=10 , y=70)
+                            Button(screenTK3, text="OK",
+                                   command=lambda: screenTK3.destroy()).place(x=170, y=100)
+                            screenTK3.mainloop()
+                            self.graph.backpacker.time =self.time.get()
+                            self.graph.backpacker.budget = self.cost.get()
+                        if self.graph.backpacker.position is None:
+                            if self.inicio is False:
+                                alerta= Tk()
+                                size = self.screen_sizeW()
+                                alerta.geometry(
+                                    f"430x140+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                aviso = StringVar(
+                                    value="por favor seleccione el sitio donde comenzara el viaje")
+                                Label(
+                                    alerta, textvariable=aviso).place(x=5, y=50)
+                                Button(alerta, text="OK",
+                                       command=lambda: alerta.destroy()).place(x=170, y=80)
+                                alerta.mainloop()
+                                self.inicio = True
+
+                            for position in self.graph.place:
+                                if self.cursor.colliderect(position.rect):
+                                    self.graph.backpacker.position = position
+
+
+            # todo esto lo debo hacer cuando el viajero ya haya terminado en el nodo en el que esta
+                #y le de click al nodo al que quiere ir
                         for places in self.graph.place:
                             if self.cursor.colliderect(places.rect):
+                # ofertar actividades
                                 screenTK = Tk()
                                 size = self.screen_sizeW()
                                 screenTK.geometry(
-                                    f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                    f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
                                 screenTK.title(
                                     "Select actividad")
                                 x = 40
                                 y = 0
+
                                 for t in places.task:
                                     if t.type == "optional":
                                         y+=30
@@ -129,8 +180,24 @@ class GUI:
                                         Button(screenTK, text="ok",
                                                command=lambda:screenTK.destroy()).place(x=x, y=90)
                                 screenTK.mainloop()
-
-
+                #ofertar trabajos
+                                if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
+                                    screenJobs = Tk()
+                                    size = self.screen_sizeW()
+                                    screenJobs.geometry(
+                                        f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                    screenJobs.title(
+                                        "Select Job")
+                                    x = 40
+                                    y = 0
+                                    for t in places.jobs:
+                                        y += 30
+                                        Button(screenJobs, text=t.name,
+                                               command=lambda: self.recopilarActividades(screenJobs, t)).place(x=x, y=y)
+                                        Button(screenJobs, text="ok",
+                                               command=lambda: screenJobs.destroy()).place(x=x, y=90)
+                                    screenJobs.mainloop()
+            #para proponer rutas
                     if self.cursor.colliderect(boton2.rect):
                         screenTK = Tk()
                         size = self.screen_sizeW()
@@ -143,48 +210,19 @@ class GUI:
                         Button(screenTK, text="Way the minimun time",
                                command = lambda: self.way(screenTK, 2)).place(x=150, y=70)
                         screenTK.mainloop()
+            #para ruta mas optima en tiempo
                     elif self.mintime:
                         for place in self.graph.place:
                             if self.cursor.colliderect(place.rect):
                                 self.origin = place
                         self.ways = True
-                        screenTK2 = Tk()
-                        size = self.screen_sizeW()
-                        screenTK2.geometry(
-                            f"430x110+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                        screenTK2.title(
-                            "Way whit the minimun time")
-                        self.time = IntVar()
-                        textT = StringVar(
-                            value="Write the trip time.")
-                        labelT = Label(
-                            screenTK2, textvariable=textT).place(x=5, y=10)
-                        Time_field = Entry(
-                            screenTK2, textvariable=self.time, width=25).place(x=5, y=30)
-                        Button(screenTK2, text="ok",
-                               command=lambda: self.way(screenTK2, 2)).place(x=30, y=60)
-                        screenTK2.mainloop()
+            #para ruta mas economica
                     elif self.mincost:
                         for place in self.graph.place:
                             if self.cursor.colliderect(place.rect):
                                 self.origin = place
                         self.ways = True
-                        screenTK3 = Tk()
-                        size = self.screen_sizeW()
-                        screenTK3.geometry(
-                            f"430x110+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                        screenTK3.title(
-                            "Way whit the minimun cost")
-                        self.cost = IntVar()
-                        textC = StringVar(
-                            value="Write the backpacker budget.")
-                        labelC = Label(
-                            screenTK3, textvariable=textC).place(x=5, y=10)
-                        Cost_field = Entry(
-                            screenTK3, textvariable=self.cost, width=25).place(x=10, y=30)
-                        Button(screenTK3, text="OK",
-                               command=lambda: screenTK3.destroy()).place(x=170, y=70)
-                        screenTK3.mainloop()
+
                     if self.ways:
                         self.waySave.clear()
                         if self.mincost:
@@ -230,7 +268,7 @@ class GUI:
                         screenTK4.title(
                             "Travel form")
                         edge = self.graph.Get_Edge( self.origin, self.destiny)
-                        for transports in self.graph.transport:
+                        for transports in edge.transport:
                             if transports.id == 1:
                                 print( "Es avion")
                                 airplane = True
@@ -274,7 +312,6 @@ class GUI:
                     pygame.quit()
                     sys.exit()
 
-
             if self.graph == None:
                 print("Grafo vacío, no se puede dibujar")
             else:
@@ -295,8 +332,13 @@ class GUI:
                     #pygame.draw.rect(display, (0, 0, 0),
                      #                (self.graph.conection[j].rect.left, self.graph.conection[j].rect.top
                       #                , self.graph.conection[j].rect.width, self.graph.conection[j].rect.height))
-                    pygame.draw.rect(display,(0,0,0),self.graph.conection[j].rect,2)
+                    # pygame.draw.rect(display,(0,0,0),self.graph.conection[j].rect,2)
                     if self.graph.conection[j].obs:
+                        self.graph.conection[j].line = (pygame.draw.line(display, (250,0,0),
+                                                                         (origin.x,
+                                                                          origin.y),
+                                                                         (destiny.x,
+                                                                          destiny.y), 3))
                         display.blit(dead, (self.graph.conection[j].line.centerx ,self.graph.conection[j].line.centery))
 
 
@@ -306,7 +348,11 @@ class GUI:
                     scoretext = font.render(str(self.graph.place[i].name_city), 1, (0, 0, 0))
                     display.blit(scoretext, (self.graph.place[i].x - 64, self.graph.place[i].y - 64))
                     self.graph.place[i].line = display.blit(city, (self.graph.place[i].x - 30,self.graph.place[i].y - 40))
-
+                    # pinta el viajero
+            if self.graph.backpacker.position is not None and self.startRoute is True:
+                xB = self.graph.backpacker.position.x - 105
+                yB = self.graph.backpacker.position.y - 50
+                display.blit(backpacker, (xB, yB))
             if self.pas:
                 Orientation = None
                 if usePlane:
