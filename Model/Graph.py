@@ -81,6 +81,11 @@ class Graph:
         for place in self.place:
             if place.label is id:
                 return place
+    def Get_Job(self,name):
+        for job in self.jobs:
+            if job.name is name:
+                return job
+
 
     def Dijkstra(self, vertex, cost, time, variable):
         self.visited.clear()
@@ -94,7 +99,11 @@ class Graph:
         way = []
         cont = True
         men = self.visited[0]
+        ##agregue for para actualizar colores no funciona -----------------------------------------------
         if cost:
+            for conec in self.conection:
+                if conec.color is (120, 255, 120):
+                    conec.color = (36, 113, 163)
             for node in self.visited:
                 if node.status[0] > men.status[0] and node.status[0] < variable:
                     men = node
@@ -105,6 +114,10 @@ class Graph:
                 else:
                     cont = False
         if time:
+            for conec in self.conection:
+                if conec.color is (0, 0, 0):
+                    print("actualice color de tiempo")
+                    conec.color = (36, 113, 163)
             for node in self.visited:
                 if node.statusT[0] > men.statusT[0] and node.statusT[0] < variable:
                     men = node
@@ -139,12 +152,12 @@ class Graph:
                 if (v.distance * transporte.time / 60) // 6 is not 0:
                     numero_comidas += v.distance * transporte.time/60 // 6  # se multiplica por todas las veces que se cumplieron las 6 horas porque puede comer asi este haciendo algo
 
-                #self.transporteUtilizado.append(transporte)
+                self.transporteUtilizado.append(transporte.name)
 
                 self.gastosTransporte = v.distance * transporte.value
                 self.tiempoTransporte = v.distance * transporte.time
 
-        if trabajo is not None:
+        if self.backpacker.work:
             print("entre a trabajo")
             restarCosto -= trabajo.gain * time_trabajo  # resto las ganancias de los trabajos a esta variable ya que esta es quien me reune el total a restar
             # al presupuesto del muchilero
@@ -159,7 +172,7 @@ class Graph:
 
         if actividades is not None:
             for t in actividades:
-                self.actividades.append(t)
+                self.actividades.append(t.name)
                 self.gastosActividades += t.cost
                 self.tiempoActividades += t.time
                 restarCosto += t.cost

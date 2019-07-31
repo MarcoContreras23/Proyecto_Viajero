@@ -22,7 +22,7 @@
       "timeByKm": 5
     }
   ],
-  "places": 
+  "places":
   [
     {
       "label":"A",
@@ -49,13 +49,13 @@
           "name": "Sleep",
           "cost": 70,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
           "cost": 60,
           "time": 30,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Visit museum",
@@ -114,13 +114,13 @@
           "name": "Sleep",
           "cost": 95,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
           "cost": 65,
           "time": 30,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Visit park",
@@ -174,7 +174,7 @@
           "name": "Sleep",
           "cost": 130,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -249,7 +249,7 @@
           "name": "Sleep",
           "cost": 90,
           "time": 360,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -314,7 +314,7 @@
           "name": "Sleep",
           "cost": 120,
           "time": 390,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -384,7 +384,7 @@
           "name": "Sleep",
           "cost": 130,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -444,7 +444,7 @@
           "name": "Sleep",
           "cost": 100,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -514,7 +514,7 @@
           "name": "Sleep",
           "cost": 120,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -584,7 +584,7 @@
           "name": "Sleep",
           "cost": 150,
           "time": 450,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",

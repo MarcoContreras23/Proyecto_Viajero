@@ -41,14 +41,13 @@ class GUI:
 #metodos necesarios para el viaje
         self.actividadesVertice = []  # esta lista se va a limpiar en cuanto se llame a el algoritmo que
         # resta el costo de las actividades al mochilero para seguir al siguiente nodo
-
+        self.trabajosVertice = []
         self.startRoute = False # para establecer cuando el mochilero comenzo su ruta y se le deben ofertar actividades y trabajos
         self.trabajo = None
         self.tiempoTrabajo = None
         self.formTransport =None
         self.destinoV = None
         self.continuar =False #bandera continuar
-
         self.all()
         # thread = threading.Thread(self.all())
         # thread.start()
@@ -64,7 +63,7 @@ class GUI:
 
         display = pygame.display.set_mode((1366, 768), pygame.RESIZABLE)
         pygame.display.set_caption("Travel!!")
-        fuente = pygame.font.SysFont('Comic Sans MS', 15)
+        fuente = pygame.font.SysFont('Comic Sans MS', 16)
 
         # Cargar las images
         city = pygame.image.load("..\\Resource\\cityscape.png")
@@ -92,14 +91,13 @@ class GUI:
         button = pygame.transform.scale(button, (140, 75))
         button2 = pygame.transform.scale(button, (110, 90))
         # Asignacion de botones
-        boton = ButtonP(button, button2, 350, 15)
-        boton2 = ButtonP(button, button2, 200, 15)
-        boton3 = ButtonP(button,button2,500,15)
-        Bcontinuar = ButtonP(button,button2,650,15)
-
+        boton = ButtonP(button, button2, 350, 20)
+        boton2 = ButtonP(button, button2, 500, 20)
+        boton3 = ButtonP(button,button2,200,20)
+        Bcontinuar = ButtonP(button,button2,650,20)
         Binfo = ButtonP(button,button2,380,130)
         # text of buttons
-        obstruccion = fuente.render("Obstruir camino", True, (0, 0, 0))
+        obstruccion = fuente.render("obstruction way", True, (0, 0, 0))
         way = fuente.render("Minimum way", True,(0,0,0))
         travel = fuente.render("Start Travel",True,(0,0,0))
         continueB = fuente.render("Continue travel",True,(0,0,0))
@@ -107,12 +105,12 @@ class GUI:
 
         #fonts
         fontIn = pygame.font.SysFont("Times New Roman", 25)
-        fontBold = pygame.font.SysFont("Times New Roman", 16)
-        font = pygame.font.SysFont("Times New Roman", 16)
+        fontBold = pygame.font.SysFont("Times New Roman", 14)
+        font = pygame.font.SysFont("Times New Roman", 8)
 
         #local variables
         init = None
-        poss = pygame.mouse.get_pos()
+        poss = (0, 0)
         MinCost = []
         MinTime = []
         airplane = False
@@ -132,6 +130,7 @@ class GUI:
             #cuando comience a viajar
                     if self.cursor.colliderect(boton3.rect) or self.startRoute is True :
                         self.startRoute=True
+
                         if self.time is None:
                             screenTK3 = Tk()
                             size = self.screen_sizeW()
@@ -158,6 +157,8 @@ class GUI:
                             screenTK3.mainloop()
                             self.graph.backpacker.time = self.time.get()
                             self.graph.backpacker.budget = self.cost.get()
+
+                        #pintar label de el mochilero en un else aqui
                         if self.graph.backpacker.position is None:
                             if self.inicio is False:
                                 alerta= Tk()
@@ -165,21 +166,22 @@ class GUI:
                                 alerta.geometry(
                                     f"430x140+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
                                 aviso = StringVar(
-                                    value="por favor seleccione el sitio donde comenzara el viaje")
+                                    value="Please choose the place where start your travel")
                                 Label(
-                                    alerta, textvariable=aviso).place(x=150, y=50)
+                                    alerta, textvariable=aviso).place(x=100, y=50)
                                 Button(alerta, text="OK",
-                                       command=lambda: alerta.destroy()).place(x=50, y=80)
+                                       command=lambda: alerta.destroy()).place(x=200, y=100)
                                 alerta.mainloop()
                                 self.inicio = True
+
 
                             for position in self.graph.place:
                                 if self.cursor.colliderect(position.rect):
                                     self.graph.backpacker.position = position
+                                    poss = (position.rect.x,position.rect.y)
 
                         if self.cursor.colliderect(Bcontinuar.rect) or self.continuar:# que espere a que termine en el nodo
                 # todo esto lo debo hacer cuando el viajero ya haya terminado en el nodo en el que esta
-                            print("entre a continuar")
                             self.continuar=True
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
@@ -197,7 +199,6 @@ class GUI:
                                         "Travel form")
                                     if self.destinoV is not self.graph.backpacker.position:
                                         edge = self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV)
-                                        print(edge.distance)
                                         for transports in edge.transport:
                                             if transports == 1:
                                                 airplane = True
@@ -231,42 +232,54 @@ class GUI:
                                         screenTK.geometry(
                                             f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
                                         screenTK.title(
-                                            "Select actividad")
+                                            "Select activity")
                                         x = 40
                                         y = 0
-                                        self.actividades =[]
+                                        self.actividadesVertice =[]
                                         for t in places.task:
                                             if t.type == "optional":
                                                 y+=30
                                                 Button(screenTK, text=t.name,
-                                                    command=lambda: self.recopilarActividades(screenTK, t)).place(x=x,y= y)
+                                                    command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
                                                 Button(screenTK, text="ok",
-                                                       command=lambda:screenTK.destroy()).place(x=x, y=90)
+                                                       command=lambda: screenTK.destroy()).place(x=x, y=90)
                                         screenTK.mainloop()
                      #ofertar trabajos
                                         if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
                                             screenJobs = Tk()
                                             size = self.screen_sizeW()
                                             screenJobs.geometry(
-                                             f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                             f"430x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
                                             screenJobs.title("Select Job")
                                             x = 40
                                             y = 0
+                                            """for t in places.jobs:
+                                                y += 30
+                                                Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)"""
                                             for t in places.jobs:
-                                             y += 30
-                                             Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)
-                                             screenJobs.mainloop()
+                                                y += 30
+                                                texcT2 = StringVar(
+                                                    value=t.name)
+                                                labelT = Label(
+                                                    screenJobs,textvariable=texcT2).place(x=x,y=y)
+                                            Cost_field = Entry(
+                                                screenJobs, textvariable=self.recopilarTrabajos(screenJobs,t), width=25).place(x=150, y=y+30)
+                                            Button(screenJobs, text="OK",
+                                                   command=lambda: screenJobs.destroy()).place(x=200, y=170)
+                                            print(self.trabajo)
+
+
+                                            screenJobs.mainloop()
                                             self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.graph.getTransporte(self.formTransport), self.actividadesVertice, self.trabajo,
                                                                      self.tiempoTrabajo.get())
-                                            print(self.graph.backpacker.budget)
                                             self.graph.backpacker.position = self.destinoV
                                         else:
                                             self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport,
                                                                      self.actividadesVertice,None ,0)
-                                            print(self.graph.backpacker.budget)
                                             self.graph.backpacker.position = self.destinoV
             #para proponer rutas
                     if self.cursor.colliderect(boton2.rect):
+
                         if self.time is None:
                             screenTK3 = Tk()
                             size = self.screen_sizeW()
@@ -344,8 +357,9 @@ class GUI:
                                         edge.color = (120, 255, 120)
                             self.mincost = False
                         if self.mintime:
+
                             for edge in self.graph.conection:
-                                for node in MinTime:
+                               for node in MinTime:
                                     if edge.origin is self.graph.Get_Vertex(node.statusT[1]) and edge.destiny is node:
                                         edge.color = (0, 0, 0)
                                     if edge.origin is node and edge.destiny is self.graph.Get_Vertex(node.status[1]):
@@ -445,74 +459,75 @@ class GUI:
 
             #pygame.draw.rect(display, (0, 0, 0), (330, 330, 200, 240))
             #pygame.draw.rect(display, (255, 255, 255), (310, 310, 180, 220))
-            display.blit((fontIn.render("INFO", True, (0, 0, 0))), (20, 15))
-            coorX = 15
+            display.blit((fontIn.render("INFO", True, (0, 0, 0))), (77, 15))
+            # lugares visitados
+            coorX=15
             for j in self.graph.lugaresVisitados:
                 display.blit(
                     (fontBold.render("Visited places:", True, (0, 0, 0))), (15, 50))
                 display.blit(
                     (font.render(f"{j.label}", True, (0, 0, 0))), (coorX, 75))
-                coorX += 25
-            # tiempo en lugares
+                coorX+=25
+            # tiempo en lugares    
             display.blit(
                 (fontBold.render("Time places:", True, (0, 0, 0))), (15, 100))
             display.blit(
-                (font.render(f"{self.graph.tiempoLugares}", True, (0, 0, 0))), (15, 125))
+                (fuente.render(f"{self.graph.tiempoLugares}", True, (0, 0, 0))), (15, 125))
             # gastos lugares
             display.blit(
                 (fontBold.render("Expenses places:", True, (0, 0, 0))), (15, 150))
             display.blit(
-                (font.render(f"{self.graph.gastoLugares}", True, (0, 0, 0))), (15, 175))
+                (fuente.render(f"{self.graph.gastoLugares}", True, (0, 0, 0))), (15, 175))
             # ganancias lugares
             display.blit(
                 (fontBold.render("Earnings places:", True, (0, 0, 0))), (15, 200))
             display.blit(
-                (font.render(f"{self.graph.gananciasLugares}", True, (0, 0, 0))), (15, 225))
+                (fuente.render(f"{self.graph.gananciasLugares}", True, (0, 0, 0))), (15, 225))
             # transporte utilizado
             display.blit(
                 (fontBold.render("Used transport:", True, (0, 0, 0))), (15, 250))
             display.blit(
-                (font.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15, 275))
+                (fuente.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15,275))
             # gastos tranporte
             display.blit(
                 (fontBold.render("Expenses Transport:", True, (0, 0, 0))), (15, 300))
             display.blit(
-                (font.render(f"{self.graph.gastosTransporte}", True, (0, 0, 0))), (15, 325))
-            # tiempo transporte
+                (fuente.render(f"{self.graph.gastosTransporte}", True, (0, 0, 0))), (15, 325))
+            #tiempo transporte
             display.blit(
                 (fontBold.render("Time Transport:", True, (0, 0, 0))), (15, 350))
             display.blit(
-                (font.render(f"{self.graph.tiempoTransporte}", True, (0, 0, 0))), (15, 375))
+                (fuente.render(f"{self.graph.tiempoTransporte}", True, (0, 0, 0))), (15, 375))
             # trabajos
             display.blit(
                 (fontBold.render("Jobs:", True, (0, 0, 0))), (15, 400))
             display.blit(
-                (font.render(f"{self.graph.trabajos}", True, (0, 0, 0))), (15, 425))
+                (fuente.render(f"{self.graph.trabajos}", True, (0, 0, 0))), (15, 425))
             # ganancias trabajos
             display.blit(
                 (fontBold.render("Earnings Jobs:", True, (0, 0, 0))), (15, 450))
             display.blit(
-                (font.render(f"{self.graph.gananciasTrabajos}", True, (0, 0, 0))), (15, 475))
-            # tiempo trabajos
+                (fuente.render(f"{self.graph.gananciasTrabajos}", True, (0, 0, 0))), (15, 475))
+            #tiempo trabajos
             display.blit(
                 (fontBold.render("Time Jobs:", True, (0, 0, 0))), (15, 500))
             display.blit(
-                (font.render(f"{self.graph.tiempoTrabajos}", True, (0, 0, 0))), (15, 525))
+                (fuente.render(f"{self.graph.tiempoTrabajos}", True, (0, 0, 0))), (15, 525))
             # actividades
             display.blit(
                 (fontBold.render("Activities:", True, (0, 0, 0))), (15, 550))
             display.blit(
-                (font.render(f"{self.graph.actividades}", True, (0, 0, 0))), (15, 575))
-            # gastos actividades
+                (fuente.render(f"{self.graph.actividades}", True, (0, 0, 0))), (15, 575))
+            #gastos actividades
             display.blit(
                 (fontBold.render("Expenses activities:", True, (0, 0, 0))), (15, 600))
             display.blit(
-                (font.render(f"{self.graph.gastosActividades}", True, (0, 0, 0))), (15, 625))
-            # tiempo actividades
+                (fuente.render(f"{self.graph.gastosActividades}", True, (0, 0, 0))), (15, 625))
+            #tiempo actividades
             display.blit(
                 (fontBold.render("Time activities:", True, (0, 0, 0))), (15, 650))
             display.blit(
-                (font.render(f"{self.graph.tiempoActividades}", True, (0, 0, 0))), (15, 675))
+                (fuente.render(f"{self.graph.tiempoActividades}", True, (0, 0, 0))), (15, 675))
             pygame.display.update()
 
 
@@ -599,6 +614,7 @@ class GUI:
     #metodos para la ruta
     def recopilarTrabajos(self,screenJobs, t):
         self.trabajo=t
+        self.trabajosVertice.append(t)
         screenJobs.destroy()
 
         tiempoTrabajo = Tk()
@@ -623,7 +639,6 @@ class GUI:
 
     def recopilarActividades(self,t):
         self.actividadesVertice.append(t)
-        print (t.name)
 
     def min(self):
         men = self.visited[0]
