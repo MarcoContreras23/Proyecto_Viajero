@@ -81,6 +81,11 @@ class Graph:
         for place in self.place:
             if place.label is id:
                 return place
+    def Get_Job(self,name):
+        for job in self.jobs:
+            if job.name is name:
+                return job
+
 
     def Dijkstra(self, vertex, cost, time, variable):
         self.visited.clear()
