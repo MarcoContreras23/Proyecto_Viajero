@@ -15,3 +15,4 @@ class Vertex:
         self.statusT = [inf, None]
         self.statusD = [inf, None]
         self.rect = Rect(x,y,65,65)
+        self.soloPaso = False
