@@ -157,6 +157,8 @@ class GUI:
                             screenTK3.mainloop()
                             self.graph.backpacker.time = self.time.get()
                             self.graph.backpacker.budget = self.cost.get()
+
+                        #pintar label de el mochilero en un else aqui
                         if self.graph.backpacker.position is None:
                             if self.inicio is False:
                                 alerta= Tk()
@@ -178,7 +180,6 @@ class GUI:
 
                         if self.cursor.colliderect(Bcontinuar.rect) or self.continuar:# que espere a que termine en el nodo
                 # todo esto lo debo hacer cuando el viajero ya haya terminado en el nodo en el que esta
-                            print("entre a continuar")
                             self.continuar=True
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
@@ -244,6 +245,7 @@ class GUI:
                                         screenTK.mainloop()
                      #ofertar trabajos
                                         if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
+                                            print("ya dismunuyo el trabajo")
                                             screenJobs = Tk()
                                             size = self.screen_sizeW()
                                             screenJobs.geometry(
@@ -252,9 +254,10 @@ class GUI:
                                             x = 40
                                             y = 0
                                             for t in places.jobs:
-                                             y += 30
-                                             Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)
-                                             screenJobs.mainloop()
+                                                y += 30
+                                                Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)
+
+                                            screenJobs.mainloop()
                                             self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.graph.getTransporte(self.formTransport), self.actividadesVertice, self.trabajo,
                                                                      self.tiempoTrabajo.get())
                                             print(self.graph.backpacker.budget)
@@ -266,6 +269,7 @@ class GUI:
                                             self.graph.backpacker.position = self.destinoV
             #para proponer rutas
                     if self.cursor.colliderect(boton2.rect):
+
                         if self.time is None:
                             screenTK3 = Tk()
                             size = self.screen_sizeW()
@@ -343,8 +347,9 @@ class GUI:
                                         edge.color = (120, 255, 120)
                             self.mincost = False
                         if self.mintime:
+
                             for edge in self.graph.conection:
-                                for node in MinTime:
+                               for node in MinTime:
                                     if edge.origin is self.graph.Get_Vertex(node.statusT[1]) and edge.destiny is node:
                                         edge.color = (0, 0, 0)
                                     if edge.origin is node and edge.destiny is self.graph.Get_Vertex(node.status[1]):

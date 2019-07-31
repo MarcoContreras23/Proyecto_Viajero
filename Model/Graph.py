@@ -94,7 +94,11 @@ class Graph:
         way = []
         cont = True
         men = self.visited[0]
+        ##agregue for para actualizar colores no funciona -----------------------------------------------
         if cost:
+            for conec in self.conection:
+                if conec.color is (120, 255, 120):
+                    conec.color = (36, 113, 163)
             for node in self.visited:
                 if node.status[0] > men.status[0] and node.status[0] < variable:
                     men = node
@@ -105,6 +109,10 @@ class Graph:
                 else:
                     cont = False
         if time:
+            for conec in self.conection:
+                if conec.color is (0, 0, 0):
+                    print("actualice color de tiempo")
+                    conec.color = (36, 113, 163)
             for node in self.visited:
                 if node.statusT[0] > men.statusT[0] and node.statusT[0] < variable:
                     men = node
