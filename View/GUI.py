@@ -183,7 +183,7 @@ class GUI:
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
                                 if self.cursor.colliderect(places.rect):
-                                    if places in self.visited:
+                                    if places in self.graph.visited:
                                        places.soloPaso = True
                                     self.destinoV =places
                                     self.destiny = places#para pintar avion
@@ -198,7 +198,6 @@ class GUI:
                                         "Travel form")
                                     if self.destinoV is not self.graph.backpacker.position:
                                         edge = self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV)
-                                        print(edge.distance)
                                         for transports in edge.transport:
                                             if transports == 1:
                                                 airplane = True
@@ -272,11 +271,9 @@ class GUI:
                                                 self.graph.backpacker.position = self.destinoV
 
                                         else:
-                                            self.pas = True
                                             self.graph.backpacker.budget -= self.graph.Get_Edge(
                                                 self.graph.backpacker.position,
                                                 self.destinoV).distance * self.formTransport.value
-                                            print("aqui resto lo del pasaje")
 
                                             self.graph.backpacker.time -= self.graph.Get_Edge(
                                                 self.graph.backpacker.position,
@@ -544,8 +541,6 @@ class GUI:
 
 
     def transportMove(self, init, destiny, poss):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
 
@@ -561,8 +556,6 @@ class GUI:
         return poss
 
     def MoveImage(self, poss,init, destiny, carRight,carDown,carLeft,carUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = carRight
@@ -578,8 +571,6 @@ class GUI:
         return Orientation
 
     def MoveCar(self, poss,init,destiny,airplaneRight,airplaneDown,airplaneLeft,airplaneUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = airplaneRight
@@ -596,8 +587,6 @@ class GUI:
         return Orientation
 
     def MoveDonkey(self, poss,init,destiny,donkeyRight,donkeyDown,donkeyLeft,donkeyUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = donkeyRight

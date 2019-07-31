@@ -63,8 +63,8 @@ class Graph:
             origin.adjacences.append(destiny)
 
     def Get_Edge(self, origin, destiny):
-        for edge in origin.adjacencies:
-            if edge.destiny is destiny:
+        for edge in self.conection:
+            if edge.destiny is destiny and edge.origin is origin:
                 return edge
 
     def Get_Places(self, origin, destiny):
