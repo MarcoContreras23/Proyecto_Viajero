@@ -28,7 +28,7 @@
       "label":"A",
       "name":"City A",
       "minTimeHere": 240,
-      "posx" : 200,
+      "posx" : 500,
       "posy": 240,
       "jobs":
       [
@@ -93,7 +93,7 @@
       "label":"B",
       "name":"City B",
       "minTimeHere": 240,
-      "posx" : 800,
+      "posx" : 950,
       "posy": 70,
       "jobs":
       [
@@ -153,7 +153,7 @@
       "label":"C",
       "name":"City C",
       "minTimeHere": 300,
-      "posx" : 800,
+      "posx" : 950,
       "posy": 240,
       "jobs":
       [
@@ -228,7 +228,7 @@
       "label":"D",
       "name":"City D",
       "minTimeHere": 600,
-      "posx" : 1150,
+      "posx" : 1300,
       "posy": 140,
       "jobs":
       [
@@ -293,7 +293,7 @@
       "label":"E",
       "name":"City E",
       "minTimeHere": 540,
-      "posx" : 500,
+      "posx" : 700,
       "posy": 390,
       "jobs":
       [
@@ -363,7 +363,7 @@
       "label":"F",
       "name":"City F",
       "minTimeHere": 420,
-      "posx" : 200,
+      "posx" : 500,
       "posy": 540,
       "jobs":
       [
@@ -423,7 +423,7 @@
       "label":"G",
       "name":"City G",
       "minTimeHere": 480,
-      "posx" : 800,
+      "posx" : 950,
       "posy": 540,
       "jobs":
       [
@@ -493,7 +493,7 @@
       "label":"H",
       "name":"City H",
       "minTimeHere": 540,
-      "posx" : 1150,
+      "posx" : 1300,
       "posy": 390,
       "jobs":
       [
@@ -563,7 +563,7 @@
       "label":"I",
       "name":"City I",
       "minTimeHere": 660,
-      "posx" : 1150,
+      "posx" : 1300,
       "posy": 690,
       "jobs":
       [
@@ -628,7 +628,7 @@
       "label":"J",
       "name":"City J",
       "minTimeHere": 600,
-      "posx" : 500,
+      "posx" : 700,
       "posy": 690,
       "jobs":
       [

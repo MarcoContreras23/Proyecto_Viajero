@@ -52,7 +52,7 @@ class Main:
                 destiny = graph.search_node(go["label"])
                 distance = go["travelDistance"]
                 transport = go["transportForms"]
-                conection = Conection(origin,destiny,distance, origin.x, origin.y)
+                conection = Conection(origin,destiny, distance, origin.x, origin.y,transport)
                 origin.adjacencies.append(conection)
                 graph.conection.append(conection)
 

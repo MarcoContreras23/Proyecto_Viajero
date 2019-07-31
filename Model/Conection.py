@@ -2,10 +2,10 @@ from pygame import Rect
 
 
 class Conection:
-    def __init__(self,origin ,destiny ,x,y,transport,Distance = 0):
+    def __init__(self,origin ,destiny,distance ,x,y,transport):
         self.origin = origin
         self.destiny = destiny
-        self.distance = Distance
+        self.distance = distance
         self.transport = transport
         self.bi = False
         self.obs = False
