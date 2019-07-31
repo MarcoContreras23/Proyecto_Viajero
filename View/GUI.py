@@ -227,6 +227,7 @@ class GUI:
                                                    command=lambda: self.transport(screenTK4, Tr3)).place(x=20, y=150)
                                         screenTK4.mainloop()
                             # ofertar actividades
+
                                         if places.soloPaso is False:
                                             screenTK = Tk()
                                             size = self.screen_sizeW()
@@ -271,6 +272,7 @@ class GUI:
                                                 self.graph.backpacker.position = self.destinoV
 
                                         else:
+                                            self.pas = True
                                             self.graph.backpacker.budget -= self.graph.Get_Edge(
                                                 self.graph.backpacker.position,
                                                 self.destinoV).distance * self.formTransport.value
