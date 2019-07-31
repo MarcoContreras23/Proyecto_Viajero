@@ -183,7 +183,7 @@ class GUI:
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
                                 if self.cursor.colliderect(places.rect):
-                                    if places in self.graph.visited:
+                                    if places in self.visited:
                                        places.soloPaso = True
                                     self.destinoV =places
                                     self.destiny = places#para pintar avion
@@ -269,6 +269,7 @@ class GUI:
                                                                          self.actividadesVertice,None ,0)
                                                 print(self.graph.backpacker.budget)
                                                 self.graph.backpacker.position = self.destinoV
+                                                self.visited.append(self.destinoV)
 
                                         else:
                                             self.graph.backpacker.budget -= self.graph.Get_Edge(
