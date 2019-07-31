@@ -48,7 +48,6 @@ class GUI:
         self.formTransport =None
         self.destinoV = None
         self.continuar =False #bandera continuar
-
         self.all()
         # thread = threading.Thread(self.all())
         # thread.start()
@@ -234,14 +233,14 @@ class GUI:
                                             "Select actividad")
                                         x = 40
                                         y = 0
-                                        self.actividades =[]
+                                        self.actividadesVertice =[]
                                         for t in places.task:
                                             if t.type == "optional":
                                                 y+=30
                                                 Button(screenTK, text=t.name,
-                                                    command=lambda: self.recopilarActividades(screenTK, t)).place(x=x,y= y)
+                                                    command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
                                                 Button(screenTK, text="ok",
-                                                       command=lambda:screenTK.destroy()).place(x=x, y=90)
+                                                       command=lambda: screenTK.destroy()).place(x=x, y=90)
                                         screenTK.mainloop()
                      #ofertar trabajos
                                         if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
@@ -451,70 +450,73 @@ class GUI:
             #pygame.draw.rect(display, (255, 255, 255), (310, 310, 180, 220))
             display.blit((fontIn.render("INFO", True, (0, 0, 0))), (77, 15))
             # lugares visitados
-            display.blit(
-                (fontBold.render("Visited places:", True, (0, 0, 0))), (15, 50))
-            display.blit(
-                (font.render(f"{self.graph.lugaresVisitados}", True, (0, 0, 0))), (120, 50))
+            coorX=15
+            for j in self.graph.lugaresVisitados:
+                display.blit(
+                    (fontBold.render("Visited places:", True, (0, 0, 0))), (15, 50))
+                display.blit(
+                    (font.render(f"{j.label}", True, (0, 0, 0))), (coorX, 75))
+                coorX+=25
             # tiempo en lugares    
             display.blit(
-                (fontBold.render("Time places:", True, (0, 0, 0))), (15, 75))
+                (fontBold.render("Time places:", True, (0, 0, 0))), (15, 100))
             display.blit(
-                (font.render(f"{self.graph.tiempoLugares}", True, (0, 0, 0))), (90, 75))
+                (font.render(f"{self.graph.tiempoLugares}", True, (0, 0, 0))), (15, 125))
             # gastos lugares
             display.blit(
-                (fontBold.render("Expenses places:", True, (0, 0, 0))), (15, 100))
+                (fontBold.render("Expenses places:", True, (0, 0, 0))), (15, 150))
             display.blit(
-                (font.render(f"{self.graph.gastoLugares}", True, (0, 0, 0))), (15, 100))
+                (font.render(f"{self.graph.gastoLugares}", True, (0, 0, 0))), (15, 175))
             # ganancias lugares
             display.blit(
-                (fontBold.render("Earnings places:", True, (0, 0, 0))), (15, 125))
+                (fontBold.render("Earnings places:", True, (0, 0, 0))), (15, 200))
             display.blit(
-                (font.render(f"{self.graph.gananciasLugares}", True, (0, 0, 0))), (105, 125))
+                (font.render(f"{self.graph.gananciasLugares}", True, (0, 0, 0))), (15, 225))
             # transporte utilizado
             display.blit(
-                (fontBold.render("Used transport:", True, (0, 0, 0))), (15, 150))
+                (fontBold.render("Used transport:", True, (0, 0, 0))), (15, 250))
             display.blit(
-                (font.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15, 150))
+                (font.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15,275))
             # gastos tranporte
             display.blit(
-                (fontBold.render("Expenses Transport:", True, (0, 0, 0))), (15, 200))
+                (fontBold.render("Expenses Transport:", True, (0, 0, 0))), (15, 300))
             display.blit(
-                (font.render(f"{self.graph.gastosTransporte}", True, (0, 0, 0))), (105, 200))
+                (font.render(f"{self.graph.gastosTransporte}", True, (0, 0, 0))), (15, 325))
             #tiempo transporte
             display.blit(
-                (fontBold.render("Time Transport:", True, (0, 0, 0))), (15, 225))
+                (fontBold.render("Time Transport:", True, (0, 0, 0))), (15, 350))
             display.blit(
-                (font.render(f"{self.graph.tiempoTransporte}", True, (0, 0, 0))), (105, 225))
+                (font.render(f"{self.graph.tiempoTransporte}", True, (0, 0, 0))), (15, 375))
             # trabajos
             display.blit(
-                (fontBold.render("Jobs:", True, (0, 0, 0))), (15, 250))
+                (fontBold.render("Jobs:", True, (0, 0, 0))), (15, 400))
             display.blit(
-                (font.render(f"{self.graph.trabajos}", True, (0, 0, 0))), (105, 250))
+                (font.render(f"{self.graph.trabajos}", True, (0, 0, 0))), (15, 425))
             # ganancias trabajos
             display.blit(
-                (fontBold.render("Earnings Jobs:", True, (0, 0, 0))), (15, 275))
+                (fontBold.render("Earnings Jobs:", True, (0, 0, 0))), (15, 450))
             display.blit(
-                (font.render(f"{self.graph.gananciasTrabajos}", True, (0, 0, 0))), (105, 275))
+                (font.render(f"{self.graph.gananciasTrabajos}", True, (0, 0, 0))), (15, 475))
             #tiempo trabajos
             display.blit(
-                (fontBold.render("Time Jobs:", True, (0, 0, 0))), (15, 300))
+                (fontBold.render("Time Jobs:", True, (0, 0, 0))), (15, 500))
             display.blit(
-                (font.render(f"{self.graph.tiempoTrabajos}", True, (0, 0, 0))), (105, 300))
+                (font.render(f"{self.graph.tiempoTrabajos}", True, (0, 0, 0))), (15, 525))
             # actividades
             display.blit(
-                (fontBold.render("Activities:", True, (0, 0, 0))), (15, 325))
+                (fontBold.render("Activities:", True, (0, 0, 0))), (15, 550))
             display.blit(
-                (font.render(f"{self.graph.actividades}", True, (0, 0, 0))), (15, 325))
+                (font.render(f"{self.graph.actividades}", True, (0, 0, 0))), (15, 575))
             #gastos actividades
             display.blit(
-                (fontBold.render("Expenses activities:", True, (0, 0, 0))), (15, 350))
+                (fontBold.render("Expenses activities:", True, (0, 0, 0))), (15, 600))
             display.blit(
-                (font.render(f"{self.graph.gastosActividades}", True, (0, 0, 0))), (105, 350))
+                (font.render(f"{self.graph.gastosActividades}", True, (0, 0, 0))), (15, 625))
             #tiempo actividades
             display.blit(
-                (fontBold.render("Time activities:", True, (0, 0, 0))), (15, 375))
+                (fontBold.render("Time activities:", True, (0, 0, 0))), (15, 650))
             display.blit(
-                (font.render(f"{self.graph.tiempoActividades}", True, (0, 0, 0))), (105, 375))
+                (font.render(f"{self.graph.tiempoActividades}", True, (0, 0, 0))), (15, 675))
             pygame.display.update()
 
 
@@ -625,7 +627,6 @@ class GUI:
 
     def recopilarActividades(self,t):
         self.actividadesVertice.append(t)
-        print (t.name)
 
     def min(self):
         men = self.visited[0]

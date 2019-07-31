@@ -147,12 +147,12 @@ class Graph:
                 if (v.distance * transporte.time / 60) // 6 is not 0:
                     numero_comidas += v.distance * transporte.time/60 // 6  # se multiplica por todas las veces que se cumplieron las 6 horas porque puede comer asi este haciendo algo
 
-                #self.transporteUtilizado.append(transporte)
+                self.transporteUtilizado.append(transporte.name)
 
                 self.gastosTransporte = v.distance * transporte.value
                 self.tiempoTransporte = v.distance * transporte.time
 
-        if trabajo is not None:
+        if self.backpacker.work:
             print("entre a trabajo")
             restarCosto -= trabajo.gain * time_trabajo  # resto las ganancias de los trabajos a esta variable ya que esta es quien me reune el total a restar
             # al presupuesto del muchilero
@@ -167,7 +167,7 @@ class Graph:
 
         if actividades is not None:
             for t in actividades:
-                self.actividades.append(t)
+                self.actividades.append(t.name)
                 self.gastosActividades += t.cost
                 self.tiempoActividades += t.time
                 restarCosto += t.cost

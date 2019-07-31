@@ -22,14 +22,14 @@
       "timeByKm": 5
     }
   ],
-  "places": 
+  "places":
   [
     {
       "label":"A",
       "name":"City A",
       "minTimeHere": 240,
-      "posx" : 200,
-      "posy": 240,
+      "posx" : 566,
+      "posy": 261,
       "jobs":
       [
         {
@@ -49,13 +49,13 @@
           "name": "Sleep",
           "cost": 70,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
           "cost": 60,
           "time": 30,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Visit museum",
@@ -93,8 +93,8 @@
       "label":"B",
       "name":"City B",
       "minTimeHere": 240,
-      "posx" : 800,
-      "posy": 70,
+      "posx" : 1018,
+      "posy": 175,
       "jobs":
       [
         {
@@ -114,13 +114,13 @@
           "name": "Sleep",
           "cost": 95,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
           "cost": 65,
           "time": 30,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Visit park",
@@ -153,8 +153,8 @@
       "label":"C",
       "name":"City C",
       "minTimeHere": 300,
-      "posx" : 800,
-      "posy": 240,
+      "posx" : 1018,
+      "posy": 350,
       "jobs":
       [
         {
@@ -174,7 +174,7 @@
           "name": "Sleep",
           "cost": 130,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -228,8 +228,8 @@
       "label":"D",
       "name":"City D",
       "minTimeHere": 600,
-      "posx" : 1150,
-      "posy": 140,
+      "posx" : 1244,
+      "posy": 175,
       "jobs":
       [
         {
@@ -249,7 +249,7 @@
           "name": "Sleep",
           "cost": 90,
           "time": 360,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -293,8 +293,8 @@
       "label":"E",
       "name":"City E",
       "minTimeHere": 540,
-      "posx" : 500,
-      "posy": 390,
+      "posx" : 792,
+      "posy": 437,
       "jobs":
       [
         {
@@ -314,7 +314,7 @@
           "name": "Sleep",
           "cost": 120,
           "time": 390,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -363,8 +363,8 @@
       "label":"F",
       "name":"City F",
       "minTimeHere": 420,
-      "posx" : 200,
-      "posy": 540,
+      "posx" : 566,
+      "posy": 435,
       "jobs":
       [
         {
@@ -384,7 +384,7 @@
           "name": "Sleep",
           "cost": 130,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -423,8 +423,8 @@
       "label":"G",
       "name":"City G",
       "minTimeHere": 480,
-      "posx" : 800,
-      "posy": 540,
+      "posx" : 1018,
+      "posy": 525,
       "jobs":
       [
         {
@@ -444,7 +444,7 @@
           "name": "Sleep",
           "cost": 100,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -493,8 +493,8 @@
       "label":"H",
       "name":"City H",
       "minTimeHere": 540,
-      "posx" : 1150,
-      "posy": 390,
+      "posx" : 1244,
+      "posy": 356,
       "jobs":
       [
         {
@@ -514,7 +514,7 @@
           "name": "Sleep",
           "cost": 120,
           "time": 420,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -563,8 +563,8 @@
       "label":"I",
       "name":"City I",
       "minTimeHere": 660,
-      "posx" : 1150,
-      "posy": 690,
+      "posx" : 1244,
+      "posy": 525,
       "jobs":
       [
         {
@@ -584,7 +584,7 @@
           "name": "Sleep",
           "cost": 150,
           "time": 450,
-          "type": "mandatory" 
+          "type": "mandatory"
         },
         {
           "name": "Eat",
@@ -628,8 +628,8 @@
       "label":"J",
       "name":"City J",
       "minTimeHere": 600,
-      "posx" : 500,
-      "posy": 690,
+      "posx" : 792,
+      "posy": 620,
       "jobs":
       [
         {
