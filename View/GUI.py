@@ -41,7 +41,7 @@ class GUI:
 #metodos necesarios para el viaje
         self.actividadesVertice = []  # esta lista se va a limpiar en cuanto se llame a el algoritmo que
         # resta el costo de las actividades al mochilero para seguir al siguiente nodo
-        self.trabajosVertice = []
+
         self.startRoute = False # para establecer cuando el mochilero comenzo su ruta y se le deben ofertar actividades y trabajos
         self.trabajo = None
         self.tiempoTrabajo = None
@@ -63,7 +63,7 @@ class GUI:
 
         display = pygame.display.set_mode((1366, 768), pygame.RESIZABLE)
         pygame.display.set_caption("Travel!!")
-        fuente = pygame.font.SysFont('Comic Sans MS', 16)
+        fuente = pygame.font.SysFont('Comic Sans MS', 15)
 
         # Cargar las images
         city = pygame.image.load("..\\Resource\\cityscape.png")
@@ -97,7 +97,7 @@ class GUI:
         Bcontinuar = ButtonP(button,button2,650,20)
         Binfo = ButtonP(button,button2,380,130)
         # text of buttons
-        obstruccion = fuente.render("obstruction way", True, (0, 0, 0))
+        obstruccion = fuente.render("Obstruir camino", True, (0, 0, 0))
         way = fuente.render("Minimum way", True,(0,0,0))
         travel = fuente.render("Start Travel",True,(0,0,0))
         continueB = fuente.render("Continue travel",True,(0,0,0))
@@ -105,8 +105,8 @@ class GUI:
 
         #fonts
         fontIn = pygame.font.SysFont("Times New Roman", 25)
-        fontBold = pygame.font.SysFont("Times New Roman", 14)
-        font = pygame.font.SysFont("Times New Roman", 8)
+        fontBold = pygame.font.SysFont("Times New Roman", 16)
+        font = pygame.font.SysFont("Times New Roman", 16)
 
         #local variables
         init = None
@@ -120,8 +120,6 @@ class GUI:
         self.useCar = False
         self.useDonkey = False
 
-
-
         while True:
             """for donde se ejecutan los eventos"""
             display.fill((189, 195, 199))
@@ -130,7 +128,6 @@ class GUI:
             #cuando comience a viajar
                     if self.cursor.colliderect(boton3.rect) or self.startRoute is True :
                         self.startRoute=True
-
                         if self.time is None:
                             screenTK3 = Tk()
                             size = self.screen_sizeW()
@@ -170,10 +167,9 @@ class GUI:
                                 Label(
                                     alerta, textvariable=aviso).place(x=100, y=50)
                                 Button(alerta, text="OK",
-                                       command=lambda: alerta.destroy()).place(x=200, y=100)
+                                       command=lambda: alerta.destroy()).place(x=170, y=80)
                                 alerta.mainloop()
                                 self.inicio = True
-
 
                             for position in self.graph.place:
                                 if self.cursor.colliderect(position.rect):
@@ -186,7 +182,7 @@ class GUI:
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
                                 if self.cursor.colliderect(places.rect):
-                                    if places in self.visited:
+                                    if places in self.graph.visited:
                                        places.soloPaso = True
                                     self.destinoV =places
                                     self.destiny = places#para pintar avion
@@ -228,57 +224,67 @@ class GUI:
                                             Button(screenTK4, text="Donkey",
                                                    command=lambda: self.transport(screenTK4, Tr3)).place(x=20, y=150)
                                         screenTK4.mainloop()
-                        # ofertar actividades
-                                        screenTK = Tk()
-                                        size = self.screen_sizeW()
-                                        screenTK.geometry(
-                                            f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                                        screenTK.title(
-                                            "Select activity")
-                                        x = 40
-                                        y = 0
-                                        self.actividadesVertice =[]
-                                        for t in places.task:
-                                            if t.type == "optional":
-                                                y+=30
-                                                Button(screenTK, text=t.name,
-                                                    command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
-                                                Button(screenTK, text="ok",
-                                                       command=lambda: screenTK.destroy()).place(x=x, y=90)
-                                        screenTK.mainloop()
-                     #ofertar trabajos
-                                        if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
-                                            screenJobs = Tk()
+                            # ofertar actividades
+
+                                        if places.soloPaso is False:
+                                            screenTK = Tk()
                                             size = self.screen_sizeW()
-                                            screenJobs.geometry(
-                                             f"430x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                                            screenJobs.title("Select Job")
+                                            screenTK.geometry(
+                                                f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                            screenTK.title(
+                                                "Select actividad")
                                             x = 40
                                             y = 0
-                                            """for t in places.jobs:
-                                                y += 30
-                                                Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)"""
-                                            for t in places.jobs:
-                                                y += 30
-                                                texcT2 = StringVar(
-                                                    value=t.name)
-                                                labelT = Label(
-                                                    screenJobs,textvariable=texcT2).place(x=x,y=y)
-                                            Cost_field = Entry(
-                                                screenJobs, textvariable=self.recopilarTrabajos(screenJobs,t), width=25).place(x=150, y=y+30)
-                                            Button(screenJobs, text="OK",
-                                                   command=lambda: screenJobs.destroy()).place(x=200, y=170)
-                                            print(self.trabajo)
+                                            self.actividadesVertice =[]
+                                            for t in places.task:
+                                                if t.type == "optional":
+                                                    y+=30
+                                                    Button(screenTK, text=t.name,
+                                                        command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
+                                                    Button(screenTK, text="ok",
+                                                           command=lambda: screenTK.destroy()).place(x=x, y=90)
+                                            screenTK.mainloop()
+                         #ofertar trabajos
+                                            if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
+                                                print("ya dismunuyo el trabajo")
+                                                screenJobs = Tk()
+                                                size = self.screen_sizeW()
+                                                screenJobs.geometry(
+                                                 f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                                screenJobs.title("Select Job")
+                                                x = 40
+                                                y = 0
+                                                #for t in places.jobs:
+                                                    #y += 30
+                                                    #Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)
+                                                #for t in places
 
+                                                screenJobs.mainloop()
+                                                self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.graph.getTransporte(self.formTransport), self.actividadesVertice, self.trabajo,
+                                                                         self.tiempoTrabajo.get())
+                                                print(self.graph.backpacker.budget)
+                                                self.graph.backpacker.position = self.destinoV
+                                            else:
+                                                self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport,
+                                                                         self.actividadesVertice,None ,0)
+                                                print(self.graph.backpacker.budget)
+                                                self.graph.backpacker.position = self.destinoV
 
-                                            screenJobs.mainloop()
-                                            self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.graph.getTransporte(self.formTransport), self.actividadesVertice, self.trabajo,
-                                                                     self.tiempoTrabajo.get())
-                                            self.graph.backpacker.position = self.destinoV
                                         else:
-                                            self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport,
-                                                                     self.actividadesVertice,None ,0)
+                                            self.graph.backpacker.budget -= self.graph.Get_Edge(
+                                                self.graph.backpacker.position,
+                                                self.destinoV).distance * self.formTransport.value
 
+                                            self.graph.backpacker.time -= self.graph.Get_Edge(
+                                                self.graph.backpacker.position,
+                                                self.destinoV).distance * self.formTransport.time
+
+                                            self.graph.gastosTransporte += self.graph.Get_Edge(
+                                                self.graph.backpacker.position,
+                                                self.destinoV).distance * self.formTransport.value
+                                            self.graph.tiempoTransporte += self.graph.Get_Edge(
+                                                self.graph.backpacker.position,
+                                                self.destinoV).distance * self.formTransport.time
                                             self.graph.backpacker.position = self.destinoV
             #para proponer rutas
                     if self.cursor.colliderect(boton2.rect):
@@ -490,7 +496,7 @@ class GUI:
             display.blit(
                 (fontBold.render("Used transport:", True, (0, 0, 0))), (15, 250))
             display.blit(
-                (fuente.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15,275))
+                (font.render(f"{self.graph.transporteUtilizado}", True, (0, 0, 0))), (15,275))
             # gastos tranporte
             display.blit(
                 (fontBold.render("Expenses Transport:", True, (0, 0, 0))), (15, 300))
@@ -535,8 +541,6 @@ class GUI:
 
 
     def transportMove(self, init, destiny, poss):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
 
@@ -552,8 +556,6 @@ class GUI:
         return poss
 
     def MoveImage(self, poss,init, destiny, carRight,carDown,carLeft,carUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = carRight
@@ -569,8 +571,6 @@ class GUI:
         return Orientation
 
     def MoveCar(self, poss,init,destiny,airplaneRight,airplaneDown,airplaneLeft,airplaneUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = airplaneRight
@@ -587,8 +587,6 @@ class GUI:
         return Orientation
 
     def MoveDonkey(self, poss,init,destiny,donkeyRight,donkeyDown,donkeyLeft,donkeyUp):
-        if init not in self.visited:
-            self.visited.append(init)
         speed = 2
         i = 0
         Orientation = donkeyRight
@@ -617,7 +615,6 @@ class GUI:
     #metodos para la ruta
     def recopilarTrabajos(self,screenJobs, t):
         self.trabajo=t
-        self.trabajosVertice.append(t)
         screenJobs.destroy()
 
         tiempoTrabajo = Tk()
