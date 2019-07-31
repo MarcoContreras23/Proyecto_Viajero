@@ -20,4 +20,4 @@ class ButtonP(pygame.sprite.Sprite):
         else:
             self.actual = self.normal
         vetana.blit(self.actual, self.rect)
-        vetana.blit(agregar, (self.x, self.y + 30))
+        vetana.blit(agregar, (self.x + 20, self.y + 25))

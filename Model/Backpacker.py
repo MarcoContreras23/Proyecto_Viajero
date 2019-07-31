@@ -1,7 +1,7 @@
 class Backpacker:
-    def __init__(self,budget,time):
-        self.budget = budget
-        self.time = time
+    def __init__(self):
+        self.budget = 0
+        self.time = 0
         self.porcentaje_minimo = self.budget * 0.4
         self.work = self.getWork()
         self.position = None
