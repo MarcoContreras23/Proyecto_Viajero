@@ -181,112 +181,118 @@ class GUI:
                             self.continuar=True
                     #y le de click al nodo al que quiere ir
                             for places in self.graph.place:
+
                                 if self.cursor.colliderect(places.rect):
-                                    if places in self.visited:
+                                    if places in self.graph.lugaresVisitados:
                                        places.soloPaso = True
                                     self.destinoV =places
-                                    self.destiny = places#para pintar avion
-                                    self.pas = True  # no se para q putas es
+                                    self.destiny = places
+
+
                     #ofertar transporte
+                                    if self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV) is not None and \
+                                            self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV).obs is False:
+                                        self.pas = True  # para mover el transporte
+                                        screenTK4 = Tk()
+                                        size = self.screen_sizeW()
+                                        screenTK4.geometry(
+                                            f"430x260+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                        screenTK4.title(
+                                            "Travel form")
+                                        if self.destinoV is not self.graph.backpacker.position:
+                                            edge = self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV)
+                                            for transports in edge.transport:
+                                                if transports == 1:
+                                                    airplane = True
+                                                    for trans in self.graph.transport:
+                                                        if trans.id is 1:
+                                                            Tr1 = self.graph.getTransporte(1)
+                                                if transports == 2:
+                                                    car = True
+                                                    for trans in self.graph.transport:
+                                                        if trans.id is 2:
+                                                            Tr2 = self.graph.getTransporte(2)
+                                                if transports == 3:
+                                                    donkey = True
+                                                    for trans in self.graph.transport:
+                                                        if trans.id is 3:
+                                                            Tr3 = self.graph.getTransporte(3)
+                                            if airplane:
+                                                Button(screenTK4, text="Airplane",
+                                                       command=lambda: self.transport(screenTK4, Tr1)).place(x=20, y=50)
+                                            if car:
+                                                Button(screenTK4, text="Car",
+                                                       command=lambda: self.transport(screenTK4, Tr2)).place(x=20, y=100)
+                                            if donkey:
 
-                                    screenTK4 = Tk()
-                                    size = self.screen_sizeW()
-                                    screenTK4.geometry(
-                                        f"430x260+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                                    screenTK4.title(
-                                        "Travel form")
-                                    if self.destinoV is not self.graph.backpacker.position:
-                                        edge = self.graph.Get_Edge(self.graph.backpacker.position, self.destinoV)
-                                        for transports in edge.transport:
-                                            if transports == 1:
-                                                airplane = True
-                                                for trans in self.graph.transport:
-                                                    if trans.id is 1:
-                                                        Tr1 = self.graph.getTransporte(1)
-                                            if transports == 2:
-                                                car = True
-                                                for trans in self.graph.transport:
-                                                    if trans.id is 2:
-                                                        Tr2 = self.graph.getTransporte(2)
-                                            if transports == 3:
-                                                donkey = True
-                                                for trans in self.graph.transport:
-                                                    if trans.id is 3:
-                                                        Tr3 = self.graph.getTransporte(3)
-                                        if airplane:
-                                            Button(screenTK4, text="Airplane",
-                                                   command=lambda: self.transport(screenTK4, Tr1)).place(x=20, y=50)
-                                        if car:
-                                            Button(screenTK4, text="Car",
-                                                   command=lambda: self.transport(screenTK4, Tr2)).place(x=20, y=100)
-                                        if donkey:
+                                                Button(screenTK4, text="Donkey",
+                                                       command=lambda: self.transport(screenTK4, Tr3)).place(x=20, y=150)
+                                            screenTK4.mainloop()
+                                # ofertar actividades
 
-                                            Button(screenTK4, text="Donkey",
-                                                   command=lambda: self.transport(screenTK4, Tr3)).place(x=20, y=150)
-                                        screenTK4.mainloop()
-                            # ofertar actividades
-
-                                        if places.soloPaso is False:
-                                            screenTK = Tk()
-                                            size = self.screen_sizeW()
-                                            screenTK.geometry(
-                                                f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                                            screenTK.title(
-                                                "Select actividad")
-                                            x = 40
-                                            y = 0
-                                            self.actividadesVertice =[]
-                                            for t in places.task:
-                                                if t.type == "optional":
-                                                    y+=30
-                                                    Button(screenTK, text=t.name,
-                                                        command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
-                                                    Button(screenTK, text="ok",
-                                                           command=lambda: screenTK.destroy()).place(x=x, y=90)
-                                            screenTK.mainloop()
-                         #ofertar trabajos
-                                            if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
-                                                print("ya dismunuyo el trabajo")
-                                                screenJobs = Tk()
+                                            if places.soloPaso is False:
+                                                screenTK = Tk()
                                                 size = self.screen_sizeW()
-                                                screenJobs.geometry(
-                                                 f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
-                                                screenJobs.title("Select Job")
+                                                screenTK.geometry(
+                                                    f"400x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                                screenTK.title(
+                                                    "Select actividad")
                                                 x = 40
                                                 y = 0
-                                                #for t in places.jobs:
-                                                    #y += 30
-                                                    #Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajo(screenJobs, t)).place(x=x, y=y)
-                                                #for t in places
+                                                self.actividadesVertice =[]
+                                                for t in places.task:
+                                                    if t.type == "optional":
+                                                        y+=30
+                                                        Button(screenTK, text=t.name,
+                                                            command=lambda: self.recopilarActividades( t)).place(x=x,y= y)
+                                                        Button(screenTK, text="ok",
+                                                               command=lambda: screenTK.destroy()).place(x=x, y=90)
+                                                screenTK.mainloop()
+                             #ofertar trabajos
+                                                if self.graph.backpacker.getWork():#si ya gasto dismunuyo el presupuesto en un 40% oferta trabajo
+                                                    print("ya dismunuyo el trabajo")
+                                                    screenJobs = Tk()
+                                                    size = self.screen_sizeW()
+                                                    screenJobs.geometry(
+                                                     f"200x200+{int(size[0] / 2) - 230}+{int(size[1] / 2) - 100}")
+                                                    screenJobs.title("Select Job")
+                                                    x = 40
+                                                    y = 0
+                                                    for t in places.jobs:
+                                                        y += 30
+                                                        Button(screenJobs, text=t.name, command=lambda: self.recopilarTrabajos(screenJobs, t)).place(x=x, y=y)
 
-                                                screenJobs.mainloop()
-                                                self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.graph.getTransporte(self.formTransport), self.actividadesVertice, self.trabajo,
-                                                                         self.tiempoTrabajo.get())
-                                                print(self.graph.backpacker.budget)
-                                                self.graph.backpacker.position = self.destinoV
+
+                                                    screenJobs.mainloop()
+                                                    self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport, self.actividadesVertice, self.trabajo,
+                                                                             self.tiempoTrabajo)
+                                                    print(self.graph.backpacker.budget)
+                                                    self.graph.backpacker.position = self.destinoV
+                                                    self.visited.append(self.destinoV)
+                                                else:
+                                                    self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport,
+                                                                             self.actividadesVertice,self.trabajo ,1)
+                                                    print(self.graph.backpacker.budget)
+                                                    self.graph.backpacker.position = self.destinoV
+                                                    self.visited.append(self.destinoV)
+
                                             else:
-                                                self.graph.restar_costos(self.graph.backpacker.position, self.destinoV, self.formTransport,
-                                                                         self.actividadesVertice,None ,0)
-                                                print(self.graph.backpacker.budget)
+                                                self.graph.backpacker.budget -= self.graph.Get_Edge(
+                                                    self.graph.backpacker.position,
+                                                    self.destinoV).distance * self.formTransport.value
+
+                                                self.graph.backpacker.time -= self.graph.Get_Edge(
+                                                    self.graph.backpacker.position,
+                                                    self.destinoV).distance * self.formTransport.time
+
+                                                self.graph.gastosTransporte += self.graph.Get_Edge(
+                                                    self.graph.backpacker.position,
+                                                    self.destinoV).distance * self.formTransport.value
+                                                self.graph.tiempoTransporte += self.graph.Get_Edge(
+                                                    self.graph.backpacker.position,
+                                                    self.destinoV).distance * self.formTransport.time
+                                                self.graph.transporteUtilizado.append(self.formTransport.name)
                                                 self.graph.backpacker.position = self.destinoV
-                                                self.visited.append(self.destinoV)
-
-                                        else:
-                                            self.graph.backpacker.budget -= self.graph.Get_Edge(
-                                                self.graph.backpacker.position,
-                                                self.destinoV).distance * self.formTransport.value
-
-                                            self.graph.backpacker.time -= self.graph.Get_Edge(
-                                                self.graph.backpacker.position,
-                                                self.destinoV).distance * self.formTransport.time
-
-                                            self.graph.gastosTransporte += self.graph.Get_Edge(
-                                                self.graph.backpacker.position,
-                                                self.destinoV).distance * self.formTransport.value
-                                            self.graph.tiempoTransporte += self.graph.Get_Edge(
-                                                self.graph.backpacker.position,
-                                                self.destinoV).distance * self.formTransport.time
-                                            self.graph.backpacker.position = self.destinoV
             #para proponer rutas
                     if self.cursor.colliderect(boton2.rect):
 
@@ -329,17 +335,20 @@ class GUI:
                                command = lambda: self.way(screenTK, 2)).place(x=150, y=70)
                         screenTK.mainloop()
             #para ruta mas optima en tiempo
-                    elif self.mintime:
+                    if self.mintime:
                         for place in self.graph.place:
                             if self.cursor.colliderect(place.rect):
                                 self.origin = place
-                        self.ways = True
+                        if self.origin is not None:
+                            self.ways = True
             #para ruta mas economica
-                    elif self.mincost:
+                    if self.mincost:
                         for place in self.graph.place:
                             if self.cursor.colliderect(place.rect):
                                 self.origin = place
-                        self.ways = True
+                        if self.origin is not None:
+                            self.ways = True
+
                     if self.ways:
                         self.waySave.clear()
                         if self.mincost:
@@ -352,30 +361,49 @@ class GUI:
                                    break
                         if self.mintime:
                             MinTime = self.graph.Dijkstra(
-                                self.origin, False, True, int(self.time.get()))
+                                self.origin, False, True, self.time.get())
                             self.waySave = MinTime
                             for node in self.waySave:
                                 if node.status[1] is self.origin.label:
                                     self.destiny = node
                                     break
                         if self.mincost:
+                            print(self.origin.label)
+                            for minC in self.graph.conection:
+                                if minC.color is (120, 255, 120):
+                                    minC.color = (36, 113, 163)
+
                             for edge in self.graph.conection:
                                 for node in MinCost:
                                     if edge.origin is self.graph.Get_Vertex(node.status[1]) and edge.destiny is node:
                                         edge.color = (120, 255, 120)
                                     if edge.origin is node and edge.destiny is self.graph.Get_Vertex(node.status[1]):
                                         edge.color = (120, 255, 120)
-                            self.mincost = False
-                        if self.mintime:
+                                    print("MinCost",node.label,"----",node.status[1])
 
+                            self.origin = None
+                            MinCost.clear()
+                            self.mincost = False
+
+                        if self.mintime:
+                            print(self.origin.label)
+                            for minT in self.graph.conection:
+                                if minT.color is (0, 0, 0):
+                                    minT.color = (36, 113, 163)
+                            print("actualice los colores de las aristas")
                             for edge in self.graph.conection:
-                               for node in MinTime:
-                                    if edge.origin is self.graph.Get_Vertex(node.statusT[1]) and edge.destiny is node:
+                                for node1 in MinTime:
+                                    if edge.origin is self.graph.Get_Vertex(node1.statusT[1]) and edge.destiny is node1:
                                         edge.color = (0, 0, 0)
-                                    if edge.origin is node and edge.destiny is self.graph.Get_Vertex(node.status[1]):
+                                    if edge.origin is node1 and edge.destiny is self.graph.Get_Vertex(node1.status[1]):
                                         edge.color = (0, 0, 0)
+                                        print(self.graph.Get_Vertex(node1.statusT[1]).label)
+
+                            self.origin = None
+                            MinTime.clear()
                             self.mintime = False
                         self.ways = False
+                #obstrucciones
                     if self.cursor.colliderect(boton.rect):
                         self.obs = True
                     elif self.obs:
@@ -384,7 +412,8 @@ class GUI:
                                     < self.graph.conection[a].line.right and self.graph.conection[a].line.y
                                     < pygame.mouse.get_pos()[1] < self.graph.conection[a].line.bottom):
                                 self.graph.conection[a].obs = True
-                                break
+                                print("obstruida",self.graph.conection[a].origin.label,self.graph.conection[a].destiny.label)
+
 
                             self.obs = False
 
@@ -405,7 +434,7 @@ class GUI:
                                                                      (origin.x,
                                                                       origin.y),
                                                                      (destiny.x,
-                                                                      destiny.y),3))
+                                                                      destiny.y),5))
                         self.graph.Get_Edge(destiny, origin).line = self.graph.conection[j].line
                         show.append(self.graph.conection[j])
                         show.append(self.graph.Get_Edge(destiny, origin))
@@ -414,7 +443,7 @@ class GUI:
                                                                          (origin.x,
                                                                           origin.y),
                                                                          (destiny.x,
-                                                                          destiny.y), 3))
+                                                                          destiny.y), 5))
                         display.blit(dead, (self.graph.conection[j].line.centerx, self.graph.conection[j].line.centery))
 
 
@@ -606,7 +635,7 @@ class GUI:
     def way(self, screenTK, id):
         if id == 1:
             self.mincost = True
-        else:
+        if id == 2:
             self.mintime = True
         screenTK.destroy()
 

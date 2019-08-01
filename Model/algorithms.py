@@ -39,9 +39,10 @@ class Algorithms:
         if len(visitPlaces) == len(places):
             return visitPlaces
         for edge in edgesOrigin:
-            if edge.origin  is placeA:
-                temp.append(edge)
-                conection.append(edge)
+            if edge.obs is False:
+                if edge.origin  is placeA:
+                    temp.append(edge)
+                    conection.append(edge)
         for edge in temp:
             if minCost:
                 if (edge.origin.status[0] + edge.distance) < edge.destiny.status[0]:
